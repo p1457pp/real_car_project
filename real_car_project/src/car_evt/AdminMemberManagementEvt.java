@@ -12,18 +12,18 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import car_dto.AdminMemberManagementDTO;
-import car_view.AdminMemberManagementForm;
+import car_view.AdminMemberManagementPanel;
 import car_service.AdminMemberManagementService;
 
 import javax.swing.JOptionPane;
 
-public class AdminMemberManagementEvt extends WindowAdapter implements ActionListener, MouseListener {
+public class AdminMemberManagementEvt implements ActionListener {
 
-	private car_view.AdminMemberManagementForm ammf;
+	private car_view.AdminMemberManagementPanel ammf;
 
 	private List<String[]> original = new ArrayList<String[]>();
 	
-	public AdminMemberManagementEvt(car_view.AdminMemberManagementForm ammf) {
+	public AdminMemberManagementEvt(car_view.AdminMemberManagementPanel ammf) {
 		this.ammf=ammf;
 
 	}
@@ -44,40 +44,7 @@ public class AdminMemberManagementEvt extends WindowAdapter implements ActionLis
 		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		ammf.dispose();
-	}
+	
 	
 
 	public void deleteUser() {

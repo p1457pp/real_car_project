@@ -19,34 +19,53 @@ import car_dto.AdminMemberManagementDTO;
 import car_evt.AdminMemberManagementEvt;
 import car_service.AdminMemberManagementService;
 
-public class AdminMemberManagementForm extends JFrame {
+public class AdminMemberManagementPanel extends JPanel {
 
 	private DefaultTableModel dtm;
 	private JTable jt;
 	private JButton changeJbtn;
 	private JButton deleteJbtn;
 	
+	 private JFrame owner;
+	
 	private boolean editMode; //수정모드 여부
 	
 	
-	public AdminMemberManagementForm() {
-
-		// 탭 구성
-		String[] tabNames = { "회원관리", "예약관리", "차량관리", "정비이력", "월말정산" };
-		JTabbedPane tabs = new JTabbedPane();
-		tabs.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-
-		tabs.addTab(tabNames[0],AdminMemberManagement());
-		for (int i = 1; i < tabNames.length; i++) {
-			tabs.addTab(tabNames[i], new JPanel());     
-		}
-
-		add(tabs);
+	public AdminMemberManagementPanel(JFrame owner) {
+		super(null);
+	    this.owner = owner;
 		
-		setSize(800, 400);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
+		
+
+	    String[] columnName= {"회원아이디","회원명","이메일","전화번호","회원 등급","가입일"};
+	    
+	    
+	    
+	    dtm = new DefaultTableModel(columnName,0 ) {
+	    	@Override
+	    	public boolean isCellEditable(int row, int column) {
+	    		return editMode && column >= 1 && column <=4;
+	    	}
+	    };
+	    
+	    jt = new JTable(dtm);
+	    jt.getTableHeader().setReorderingAllowed(false); // 컬럼 순서 변경 방지
+	    jt.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+	    
+	    JScrollPane jsp = new JScrollPane(jt);
+	    jsp.setBounds(0, 0, 780, 250);
+	    add(jsp);
+	    
+	    changeJbtn=new JButton("수정");
+	    deleteJbtn=new JButton("삭제");
+	    
+	    styleButton(changeJbtn, new Color(0x2563EB));   // 파랑
+	    styleButton(deleteJbtn, new Color(0xDC2626)); 
+	    
+	    changeJbtn.setBounds(550, 270, 90, 40);
+	    deleteJbtn.setBounds(670, 270, 90, 40);
+	   add(changeJbtn);
+	   add(deleteJbtn);
 		setMemberTable();
 		
 		AdminMemberManagementEvt ammEvt = new AdminMemberManagementEvt(this);
@@ -55,41 +74,7 @@ public class AdminMemberManagementForm extends JFrame {
 	}
 	
 
-	private JPanel AdminMemberManagement() {
-		JPanel panel = new JPanel(null);
-		
-		String[] columnName= {"회원아이디","회원명","이메일","전화번호","회원 등급","가입일"};
-		
-		
-		
-		dtm = new DefaultTableModel(columnName,0 ) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return editMode && column >= 1 && column <=4;
-			}
-		};
-
-		jt = new JTable(dtm);
-		jt.getTableHeader().setReorderingAllowed(false); // 컬럼 순서 변경 방지
-		jt.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		
-		JScrollPane jsp = new JScrollPane(jt);
-		jsp.setBounds(0, 0, 780, 250);
-		panel.add(jsp);
-		
-		changeJbtn=new JButton("수정");
-		deleteJbtn=new JButton("삭제");
-		
-		styleButton(changeJbtn, new Color(0x2563EB));   // 파랑
-		styleButton(deleteJbtn, new Color(0xDC2626)); 
-		
-		changeJbtn.setBounds(550, 270, 90, 40);
-		deleteJbtn.setBounds(670, 270, 90, 40);
-		panel.add(changeJbtn);
-		panel.add(deleteJbtn);
-		
-		return panel;
-	}
+	
 	
 	public DefaultTableModel getDtm() {
 		return dtm;
@@ -150,7 +135,5 @@ public class AdminMemberManagementForm extends JFrame {
 	}
 
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new AdminMemberManagementForm());
-	}
+	
 }

@@ -45,7 +45,7 @@ public class AdminLoginDAO {
 			.append("	from	admin		")
 			.append("	where	admin_id=? and password=?	");
 
-			pstmt=con.prepareStatement(adminId.toString());
+			
 
 			//4. 바인드변수에 값 설정
 			pstmt.setString(1, alDTO.getId() );

@@ -10,7 +10,8 @@ import javax.swing.JOptionPane;
 import car_dto.AdminLoginDTO;
 import car_service.AdminLoginService;
 import car_view.AdminLoginForm;
-import car_view.AdminMemberManagementForm;
+import car_view.AdminMainForm;
+import car_view.AdminMemberManagementPanel;
 
 
 public class AdminLoginEvt extends WindowAdapter implements ActionListener {
@@ -55,7 +56,7 @@ public class AdminLoginEvt extends WindowAdapter implements ActionListener {
 				return;
 			}
 		
-		new AdminMemberManagementForm();
+		new AdminMainForm();
 		alf.dispose();
 	}
 	
