@@ -13,8 +13,8 @@ public class UserDAO {
         PreparedStatement pstmt = null;
         boolean isSuccess = false;
 
-        String sql = "INSERT INTO USERS (USER_ID, PASSWORD, USER_NAME, EMAIL, PHONE, ROLE) "
-                   + "VALUES (?, ?, ?, ?, ?, 'USER')";
+        String sql = "INSERT INTO USERS (USER_ID, PASSWORD, USER_NAME, EMAIL, PHONE, USER_GRADE, JOIN_DATE) "
+                   + "VALUES (?, ?, ?, ?, ?, '일반', SYSDATE)";
 
         try {
             conn = DbConnection.getConnection();
