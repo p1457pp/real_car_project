@@ -1,44 +1,46 @@
 package admin;
 
-import javax.swing.JButton;
+import java.awt.Font;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import admin.car_view.AdminCarListForm;
-
-
+import admin.car_view.AdminMaintenanceForm;
+import admin.car_view.AdminMemberManagementPanel;
+import admin.car_view.CarReservPanelAdmin;
+import admin.car_view.SettlementPanel;
 
 public class AdminMainTap extends JFrame {
 
 	private JTabbedPane jtpAdmin;
-	private JButton jbtnLogout;
-	private JLabel jlblAdminName;
 
 	public AdminMainTap() {
+		super("관리자 차량 관리");
+
 		jtpAdmin = new JTabbedPane();
-		jbtnLogout = new JButton("로그아웃");
-		jlblAdminName = new JLabel("관리자 " + "님");
+		jtpAdmin.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 
-		jtpAdmin.addTab("회원", new JPanel());
-		AdminCarListForm aclf = new AdminCarListForm(this, jtpAdmin);
-		jtpAdmin.addTab("차량", aclf);
-		jtpAdmin.addTab("예약", new JPanel());
-		jtpAdmin.addTab("정비", new JPanel());
-
-		jbtnLogout.setBounds(650, 2, 90, 22);
-		add(jbtnLogout);
-
-		jlblAdminName.setBounds(580, 2, 90, 22);
-		add(jlblAdminName);
+		jtpAdmin.addTab("회원관리", new AdminMemberManagementPanel(this));
+		jtpAdmin.addTab("예약관리", new CarReservPanelAdmin());
+		jtpAdmin.addTab("차량관리", new AdminCarListForm(this, jtpAdmin));
+		jtpAdmin.addTab("정비이력", new AdminMaintenanceForm().getContentPane());
+		jtpAdmin.addTab("월말정산", new SettlementPanel(this));
 
 		add(jtpAdmin);
 
-		setResizable(false);
-		setBounds(100, 100, 780, 700);
+		setSize(820, 660);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	public JTabbedPane getJtpAdmin() {
+		return jtpAdmin;
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> new AdminMainTap());
+	}
 }
