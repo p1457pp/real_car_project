@@ -91,8 +91,8 @@ public class LoginFrame extends JFrame {
                 if(isValid) {
                     JOptionPane.showMessageDialog(null, "로그인 성공!");
                     
-                    // 로그인 성공 시 마이페이지로 이동
-                    new MyPageFrame().setVisible(true);
+                    // 로그인 성공 시 로그인한 id를 전달하며 마이페이지로 이동
+                    new MyPageFrame(id).setVisible(true);
                     dispose(); // 로그인 창 닫기
                 } else {
                     JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 일치하지 않습니다.");
