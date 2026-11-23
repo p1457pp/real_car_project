@@ -1,4 +1,4 @@
-package car_evt;
+package admin.car_evt;
 
 import java.awt.event.ActionEvent;  
 import java.awt.event.ActionListener;
@@ -11,19 +11,19 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import admin.car_service.AdminMemberManagementService;
+import admin.car_view.AdminMemberManagementPanel;
 import car_dto.AdminMemberManagementDTO;
-import car_view.AdminMemberManagementPanel;
-import car_service.AdminMemberManagementService;
 
 import javax.swing.JOptionPane;
 
 public class AdminMemberManagementEvt implements ActionListener {
 
-	private car_view.AdminMemberManagementPanel ammf;
+	private admin.car_view.AdminMemberManagementPanel ammf;
 
 	private List<String[]> original = new ArrayList<String[]>();
 	
-	public AdminMemberManagementEvt(car_view.AdminMemberManagementPanel ammf) {
+	public AdminMemberManagementEvt(admin.car_view.AdminMemberManagementPanel ammf) {
 		this.ammf=ammf;
 
 	}

@@ -1,4 +1,4 @@
-package car_view;
+package admin.car_view;
 
 
 import javax.swing.JButton;
@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import car_evt.SettlementEvt;
+import admin.car_evt.SettlementEvt;
 
 public class SettlementPanel extends JPanel{
 	

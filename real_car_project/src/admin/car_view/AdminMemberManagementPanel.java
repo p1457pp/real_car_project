@@ -1,4 +1,4 @@
-package car_view;
+package admin.car_view;
 
 import java.awt.BorderLayout; 
 import java.awt.Color;
@@ -15,9 +15,9 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import admin.car_evt.AdminMemberManagementEvt;
+import admin.car_service.AdminMemberManagementService;
 import car_dto.AdminMemberManagementDTO;
-import car_evt.AdminMemberManagementEvt;
-import car_service.AdminMemberManagementService;
 
 public class AdminMemberManagementPanel extends JPanel {
 

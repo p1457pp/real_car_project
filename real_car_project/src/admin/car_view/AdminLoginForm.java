@@ -1,4 +1,4 @@
-package car_view;
+package admin.car_view;
 
 
 import java.awt.Color;  
@@ -11,7 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import car_evt.AdminLoginEvt;
+import admin.car_evt.AdminLoginEvt;
 
 public class AdminLoginForm extends JFrame {
 

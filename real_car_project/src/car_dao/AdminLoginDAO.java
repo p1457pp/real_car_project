@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import car_dto.AdminLoginDTO;
-import car_dao.DbConn;
 
 public class AdminLoginDAO {
 	private static AdminLoginDAO alDAO;
