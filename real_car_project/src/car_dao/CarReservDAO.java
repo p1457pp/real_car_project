@@ -13,13 +13,12 @@ import car_dto.CarReservTableAdminDTO;
 import car_dto.CarReservTableDTO;
 import car_dto.CarReservUserUIDTO;
 import car_dto.ReservPartsDTO;
-import car_util.DbConn;
 
 public class CarReservDAO {
 
 	private static CarReservDAO crDAO;
 
-	private DbConn db = DbConn.getInstance();
+	private DBConn db = DBConn.getInstance();
 
 	private CarReservDAO() {
 
@@ -59,7 +58,7 @@ public class CarReservDAO {
 				
 				
 			}finally {
-				db.dbClose(null, pstmt, null);
+				db.DbClose(null, pstmt, null);
 			}
 			
 			
@@ -96,7 +95,7 @@ public class CarReservDAO {
 			
 			
 		}finally {
-			db.dbClose(null, pstmt, null);
+			db.DbClose(null, pstmt, null);
 		}
 		
 		
@@ -137,7 +136,7 @@ public class CarReservDAO {
 			
 			
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 		return crdList;
 		
@@ -203,7 +202,7 @@ public class CarReservDAO {
 				
 			}
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 
 		return crList;
@@ -232,7 +231,7 @@ public class CarReservDAO {
 				seqReservNum = rs.getInt("seq_reserv_num");
 			}
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 
 		return seqReservNum;
@@ -263,7 +262,7 @@ public class CarReservDAO {
 				repairItemCode = rs.getString("REPAIR_CODE");
 			}
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 
 		return repairItemCode;
@@ -311,7 +310,7 @@ public class CarReservDAO {
 			}
 			
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 		return crfList;
 		
@@ -357,7 +356,7 @@ public class CarReservDAO {
 			}
 
 		} finally {
-			db.dbClose(rs, pstmt, null);
+			db.DbClose(rs, pstmt, null);
 		}
 		return crList;
 
@@ -387,7 +386,7 @@ public class CarReservDAO {
 
 		} finally {
 
-			db.dbClose(null, pstmt, null);
+			db.DbClose(null, pstmt, null);
 		}
 
 		return result;
@@ -425,7 +424,7 @@ public class CarReservDAO {
 			result = pstmt.executeUpdate();
 
 		} finally {
-			db.dbClose(null, pstmt, null);
+			db.DbClose(null, pstmt, null);
 		}
 
 		return result;
@@ -448,7 +447,7 @@ public class CarReservDAO {
 			
 			
 		} finally {
-			db.dbClose(null, pstmt, null);
+			db.DbClose(null, pstmt, null);
 		}
 		
 		return result;
@@ -473,7 +472,7 @@ public class CarReservDAO {
 			result = pstmt.executeUpdate();
 			
 		} finally {
-			db.dbClose(null, pstmt, null);
+			db.DbClose(null, pstmt, null);
 		}
 		
 		return result;
