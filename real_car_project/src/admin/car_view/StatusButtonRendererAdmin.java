@@ -1,4 +1,3 @@
-
 package admin.car_view;
 
 import java.awt.Color;
@@ -45,17 +44,17 @@ public class StatusButtonRendererAdmin extends JButton implements TableCellRende
         if(column==6) {
         	
         	if("예약대기".equals(cellText)) {
-        		 setBackground(new Color(0, 140, 255)); // 노란색 계열
+        		 setBackground(new Color(255, 193, 7)); // 노란색 계열 (사용자 화면과 동일)
                  setForeground(Color.BLACK);
                  setEnabled(true);
         	}  
         	if("예약확정".equals(cellText)) {
-        		 setBackground(Color.LIGHT_GRAY); // 초록색 계열
-                 setForeground(Color.DARK_GRAY);
+        		 setBackground(new Color(40, 167, 69)); // 초록색 계열 (사용자 화면과 동일)
+                 setForeground(Color.WHITE);
                  setEnabled(true);
         	}
         	if("예약취소".equals(cellText)) {
-        		setBackground(new Color(220, 53, 69)); // 빨간색 버튼
+        		setBackground(new Color(186, 156, 230)); // 연보라 (사용자 화면과 동일)
         	     setForeground(Color.WHITE);
         	     setEnabled(true);
         	}

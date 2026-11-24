@@ -1,8 +1,8 @@
 package user.car_view;
 
-import java.awt.Font;
+import car_util.UiStyle;
 
-import javax.swing.ImageIcon;
+import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,8 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-import user.UserMainTap;
+import user.UserMainTab;
 import user.car_evt.UserCarListFormEvt;
 
 
@@ -25,8 +24,7 @@ public class UserCarListForm extends JPanel {
 	private JTable jtUserCarList;
 	private DefaultTableModel dtmCarList;
 	private JScrollPane jsp;
-
-	public UserCarListForm(UserMainTap umt, JTabbedPane jtpUser, String userId) {
+	public UserCarListForm(UserMainTab umt, JTabbedPane jtpUser, String userId) {
 		setLayout(null);
 
 		jlblTitle = new JLabel("내 차량");
@@ -75,6 +73,8 @@ public class UserCarListForm extends JPanel {
 		jbtnCarInfoEdit.addActionListener(evt);
 		jbtShowCarMaintenance.addActionListener(evt);
 		jbtnCarDelete.addActionListener(evt);
+
+		UiStyle.apply(this);
 
 	}
 

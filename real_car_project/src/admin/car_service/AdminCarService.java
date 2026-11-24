@@ -102,14 +102,13 @@ public class AdminCarService {
 
 		return cnt; // 정수값 리턴
 	}// modifyCar
-
 	/**
 	 * 차량 삭제 (소프트 삭제: delete_state = 'Y')
 	 * 
 	 * @param vehicleId
 	 * @return true-삭제 성공, false-삭제 실패
 	 */
-	public boolean removeCar(int vehicleId) {
+	public boolean updateCarDeleteState(int vehicleId) {
 		boolean flag = false; // 기본 false로 설정
 		CarDAO cDAO = CarDAO.getInstance(); // DAO 연결
 

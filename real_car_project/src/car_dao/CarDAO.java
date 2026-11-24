@@ -9,7 +9,7 @@ import java.util.List;
 
 import car_dto.CarDTO;
 import car_dto.ManufacturerDTO;
-import car_util.DbConn;
+import car_util.DBConnection;
 
 
 public class CarDAO {
@@ -35,8 +35,7 @@ public class CarDAO {
 	public void insertCar(CarDTO cDTO) throws SQLException {
 		Connection con = null; // DB연결관리, Transaction처리, 쿼리문 생성객체얻는일
 		PreparedStatement pstmt = null; // 쿼리문 전처리하여 생성, 쿼리 실행
-
-		DbConn dbCon = DbConn.getInstance(); // DB 연결
+		DBConnection dbCon = DBConnection.getInstance(); // DB 연결
 
 		try {
 			// 1.드라이버로딩
@@ -46,8 +45,8 @@ public class CarDAO {
 			StringBuilder insertCar = new StringBuilder();
 			insertCar
 			.append("	insert into car_info (vehicle_id, car_num, car_model, car_year, fuel_type,	")
-			.append("					mileage, car_photo, car_scrapped, add_date, manufacturer_id, user_id, delete_state)	")
-			.append("	values(seq_car.nextval, ?, ?, ?, ?, ?, ?, 'N', sysdate, ?, ?, 'N')	");
+			.append("					mileage, car_photo, car_scrapped, add_date, manufacturer_id, user_id, is_deleted)	")
+			.append("	values(seq_car_info.nextval, ?, ?, ?, ?, ?, ?, 'N', sysdate, ?, ?, 1)	");
 		
 			pstmt = con.prepareStatement(insertCar.toString());
 			// 4.바인드변수 값 설정
@@ -82,8 +81,7 @@ public class CarDAO {
 		int cnt=0;
 		Connection con = null; // DB연결관리, Transaction처리, 쿼리문 생성객체얻는일
 		PreparedStatement pstmt = null; // 쿼리문 전처리하여 생성, 쿼리 실행
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			// 1.드라이버로딩
@@ -132,10 +130,10 @@ public class CarDAO {
 	    int cnt = 0;
 	    Connection con = null;
 	    PreparedStatement pstmt = null; 
-	    DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 	    try {
 	        con = dbCon.getConn(dbCon.getProp(null));
-	        pstmt = con.prepareStatement("update car_info set delete_state='Y' where vehicle_id=?");
+	        pstmt = con.prepareStatement("update car_info set is_deleted=0 where vehicle_id=?");
 	        pstmt.setInt(1, vehicleId);
 	        cnt = pstmt.executeUpdate();
 	    } finally {
@@ -156,8 +154,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩
@@ -168,10 +165,10 @@ public class CarDAO {
 			selectCar
 			.append("	select	c.vehicle_id, c.car_num, c.car_model, c.car_year, c.fuel_type,	")
 			.append("			c.mileage, c.car_scrapped, c.add_date, c.manufacturer_id, c.user_id,	")
-			.append("			c.delete_state, m.manufacturer	")
+			.append("			c.is_deleted, m.manufacturer	")
 			.append("	from	car_info c, car_manufacturer m		")
 			.append("	where	c.manufacturer_id = m.manufacturer_id		")
-			.append("	and		c.delete_state = 'N'	")
+			.append("	and		c.is_deleted = 1	")
 			.append("	order by c.vehicle_id		");
 
 			pstmt = con.prepareStatement(selectCar.toString());
@@ -193,7 +190,7 @@ public class CarDAO {
 				cDTO.setManufacturerId(rs.getInt("manufacturer_id"));
 				cDTO.setManufacturerName(rs.getString("manufacturer"));
 				cDTO.setUserId(rs.getString("user_id"));
-				cDTO.setDeleteState(rs.getString("delete_state"));
+				cDTO.setIsDeleted(rs.getInt("is_deleted"));
 				listCar.add(cDTO);
 			}
 
@@ -217,8 +214,7 @@ public class CarDAO {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
-
-	    DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 	    try {
 	    	//1.드라이버 로딩
@@ -228,10 +224,10 @@ public class CarDAO {
 	        StringBuilder selectCar = new StringBuilder();
 	        selectCar
 	        .append("	select	vehicle_id, car_num, car_model, car_year, fuel_type,	")
-	        .append("			mileage, car_scrapped, car_photo, add_date, manufacturer_id, user_id, delete_state	")
+	        .append("			mileage, car_scrapped, car_photo, add_date, manufacturer_id, user_id, is_deleted	")
 	        .append("	from	car_info		")
 	        .append("	where	user_id = ?		")
-	        .append("	and		delete_state = 'N'	")
+	        .append("	and		is_deleted = 1	")
 	        .append("	order by vehicle_id		");
 
 	        pstmt = con.prepareStatement(selectCar.toString());
@@ -254,7 +250,7 @@ public class CarDAO {
 	            cDTO.setAddDate(rs.getDate("add_date"));
 	            cDTO.setManufacturerId(rs.getInt("manufacturer_id"));
 	            cDTO.setUserId(rs.getString("user_id"));
-	            cDTO.setDeleteState(rs.getString("delete_state"));
+	            cDTO.setIsDeleted(rs.getInt("is_deleted"));
 
 	            listCar.add(cDTO);
 	        }
@@ -278,8 +274,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩
@@ -313,7 +308,7 @@ public class CarDAO {
 				cDTO.setAddDate(rs.getDate("add_date"));
 				cDTO.setManufacturerId(rs.getInt("manufacturer_id"));
 				cDTO.setUserId(rs.getString("user_id"));
-				cDTO.setDeleteState(rs.getString("delete_state"));
+				cDTO.setIsDeleted(rs.getInt("is_deleted"));
 			}
 
 		} finally {
@@ -335,8 +330,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩

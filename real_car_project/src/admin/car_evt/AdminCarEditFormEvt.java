@@ -25,7 +25,7 @@ public class AdminCarEditFormEvt implements ActionListener {
 		this.acef = acef;
 		this.vehicleId = vehicleId;
 		searchAllManufacturer();
-		loadCarInfo();
+		searchCarByVehicleId(vehicleId);
 	}// AdminCarEditFormEvt
 
 	@Override
@@ -51,13 +51,12 @@ public class AdminCarEditFormEvt implements ActionListener {
 			acef.getJcbManufacturer().addItem(mDTO); // 콤보박스에 현재 제조사 아이템으로 로드
 		} // end for
 	}// searchAllManufacturer
-
 	/**
 	 * JDialog를 띄울떄 선택한 테이블행의
 	 * 사용자 Id, 차량번호, 차종, 차연식, 주행거리의 정보를 
 	 * JDialog의 JTF에 로드시키기위한 메소드
 	 */
-	public void loadCarInfo() {
+	public void searchCarByVehicleId(int vehicleId) {
 		AdminCarService acs = new AdminCarService(); // acs 불러오기
 		CarDTO cDTO = acs.searchCarByVehicleId(vehicleId); // carDTO에 있는 vehicleID를 instance변수에 저장
 
@@ -82,16 +81,16 @@ public class AdminCarEditFormEvt implements ActionListener {
 
 		// 선택된 라디오버튼 정보 가져오기
 		String fuel = cDTO.getFuelType();
-		if (fuel.equals("휘발유")) {
+		if ("휘발유".equals(fuel)) {
 			acef.getJrbGasoline().setSelected(true);
 		} // end if
-		if (fuel.equals("경유")) {
+		if ("경유".equals(fuel)) {
 			acef.getJrbDiesel().setSelected(true);
 		} // end if
-		if (fuel.equals("LPG")) {
+		if ("LPG".equals(fuel)) {
 			acef.getJrbLpg().setSelected(true);
 		} // end if
-		if (fuel.equals("전기")) {
+		if ("전기".equals(fuel)) {
 			acef.getJrbElectric().setSelected(true);
 		} // end if
 

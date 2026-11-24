@@ -16,7 +16,7 @@ public class CarDTO {
 	private int manufacturerId;
 	private String manufacturerName;
 	private String userId;
-	private String deleteState;
+	private int isDeleted; // 1:정상, 0:삭제
 
 	
 	public CarDTO() {
@@ -24,7 +24,7 @@ public class CarDTO {
 
 	public CarDTO(int vehicleId, String carNum, String carModel, int carYear, String fuelType, int mileage,
 			byte[] carPhoto, String carScrapped, Date addDate, int manufacturerId, String manufacturerName,
-			String userId, String deleteState) {
+			String userId, int isDeleted) {
 		this.vehicleId = vehicleId;
 		this.carNum = carNum;
 		this.carModel = carModel;
@@ -37,7 +37,7 @@ public class CarDTO {
 		this.manufacturerId = manufacturerId;
 		this.manufacturerName = manufacturerName;
 		this.userId = userId;
-		this.deleteState = deleteState;
+		this.isDeleted = isDeleted;
 	}
 
 	public int getVehicleId() {
@@ -136,12 +136,12 @@ public class CarDTO {
 		this.userId = userId;
 	}
 
-	public String getDeleteState() {
-		return deleteState;
+	public int getIsDeleted() {
+		return isDeleted;
 	}
 
-	public void setDeleteState(String deleteState) {
-		this.deleteState = deleteState;
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class CarDTO {
 				+ carYear + ", fuelType=" + fuelType + ", mileage=" + mileage + ", carPhoto="
 				+ Arrays.toString(carPhoto) + ", carScrapped=" + carScrapped + ", addDate=" + addDate
 				+ ", manufacturerId=" + manufacturerId + ", manufacturerName=" + manufacturerName + ", userId=" + userId
-				+ ", deleteState=" + deleteState + "]";
+				+ ", deleteState=" + isDeleted + "]";
 	}
 
 }

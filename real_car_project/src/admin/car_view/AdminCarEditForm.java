@@ -1,5 +1,7 @@
 package admin.car_view;
 
+import car_util.UiStyle;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -12,8 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import admin.AdminMainTap;
+import admin.AdminMainTab;
 import admin.car_evt.AdminCarEditFormEvt;
 import car_dto.ManufacturerDTO;
 
@@ -35,8 +36,7 @@ public class AdminCarEditForm extends JDialog {
 
 	private JComboBox<ManufacturerDTO> jcbManufacturer;
 	private Font fontBold;
-
-	public AdminCarEditForm(AdminMainTap amt, int vehicleId) {
+	public AdminCarEditForm(AdminMainTab amt, int vehicleId) {
 		setLayout(null);
 
 		fontBold = new Font("맑은 고딕", Font.BOLD, 14);
@@ -182,6 +182,8 @@ public class AdminCarEditForm extends JDialog {
 		setResizable(false);
 		setLocationRelativeTo(amt);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		UiStyle.apply(this);
 	}
 
 	public JButton getJbtnRegister() {

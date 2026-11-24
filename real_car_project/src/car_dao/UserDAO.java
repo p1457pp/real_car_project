@@ -5,132 +5,170 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import car_dto.UserDTO;
+import car_util.DBConnection;
+
 public class UserDAO {
 
-    // 1. 회원가입 메서드 (INSERT)
-    public boolean registerUser(String id, String pw, String name, String email, String phone) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean isSuccess = false;
+	private static UserDAO uDAO;
 
-        String sql = "INSERT INTO USERS (USER_ID, PASSWORD, USER_NAME, EMAIL, PHONE, USER_GRADE, JOIN_DATE) "
-                   + "VALUES (?, ?, ?, ?, ?, '일반', SYSDATE)";
+	private UserDAO() {
+	}
 
-        try {
-            conn = DbConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            pstmt.setString(2, pw);
-            pstmt.setString(3, name);
-            pstmt.setString(4, email);
-            pstmt.setString(5, phone);
+	public static UserDAO getInstance() {
+		if (uDAO == null) {
+			uDAO = new UserDAO();
+		}
+		return uDAO;
+	}
 
-            int result = pstmt.executeUpdate();
-            if (result > 0) {
-                isSuccess = true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbConnection.close(conn, pstmt);
-        }
+	/**
+	 * 새로운 유저 정보 추가 (회원가입)
+	 * 
+	 * @param uDTO
+	 * @return cnt
+	 * @throws SQLException
+	 */
+	public int insertUser(UserDTO uDTO) throws SQLException {
+		int cnt = 0;
 
-        return isSuccess;
-    }
+		Connection con = null;
+		PreparedStatement pstmt = null;
 
-    // 2. 로그인 체크 메서드 (SELECT)
-    public boolean loginUser(String id, String pw) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        boolean isMatch = false;
+		DBConnection dbCon = DBConnection.getInstance();
 
-        String sql = "SELECT * FROM USERS WHERE USER_ID = ? AND PASSWORD = ?";
+		try {
+			con = dbCon.getConn(dbCon.getProp(null));
+			StringBuilder insertUser = new StringBuilder();
+			insertUser
+			.append("	insert into users (user_id, password, user_name, email, phone, user_grade, role, join_date, is_deleted)	")
+			.append("	values(?, ?, ?, ?, ?, '일반', 'USER', sysdate, 1)	");
 
-        try {
-            conn = DbConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
-            pstmt.setString(2, pw);
+			pstmt = con.prepareStatement(insertUser.toString());
+			pstmt.setString(1, uDTO.getUserId());
+			pstmt.setString(2, uDTO.getPassword());
+			pstmt.setString(3, uDTO.getName());
+			pstmt.setString(4, uDTO.getEmail());
+			pstmt.setString(5, uDTO.getPhone());
 
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                isMatch = true; // 아이디와 비밀번호가 일치하는 행이 존재함
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbConnection.close(conn, pstmt, rs);
-        }
+			cnt = pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		}
+		return cnt;
+	}
 
-        return isMatch;
-    }
+	/**
+	 * 유저 정보 수정 (이름, 이메일, 전화번호)
+	 * 
+	 * @param uDTO
+	 * @return cnt
+	 * @throws SQLException
+	 */
+	public int updateUser(UserDTO uDTO) throws SQLException {
+		int cnt = 0;
 
-    // 3. 마이페이지 내 정보 조회 메서드 (SELECT)
-    // 반환 순서: [0]USER_ID, [1]PASSWORD, [2]USER_NAME, [3]EMAIL, [4]PHONE, [5]USER_GRADE
-    public String[] getUserInfo(String id) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        String[] userInfo = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
 
-        String sql = "SELECT USER_ID, PASSWORD, USER_NAME, EMAIL, PHONE, USER_GRADE "
-                   + "FROM USERS WHERE USER_ID = ?";
+		DBConnection dbCon = DBConnection.getInstance();
 
-        try {
-            conn = DbConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
+		try {
+			con = dbCon.getConn(dbCon.getProp(null));
+			StringBuilder updateUser = new StringBuilder();
+			updateUser
+			.append("	update users	")
+			.append("	set user_name=?, email=?, phone=?	")
+			.append("	where user_id=?	");
 
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                userInfo = new String[] {
-                    rs.getString("USER_ID"),
-                    rs.getString("PASSWORD"),
-                    rs.getString("USER_NAME"),
-                    rs.getString("EMAIL"),
-                    rs.getString("PHONE"),
-                    rs.getString("USER_GRADE")
-                };
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbConnection.close(conn, pstmt, rs);
-        }
+			pstmt = con.prepareStatement(updateUser.toString());
+			pstmt.setString(1, uDTO.getName());
+			pstmt.setString(2, uDTO.getEmail());
+			pstmt.setString(3, uDTO.getPhone());
+			pstmt.setString(4, uDTO.getUserId());
 
-        return userInfo;
-    }
+			cnt = pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		}
+		return cnt;
+	}
 
-    // 4. 마이페이지 회원 정보 수정 메서드 (UPDATE)
-    public boolean updateUser(String id, String pw, String name, String email, String phone) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean isSuccess = false;
+	/**
+	 * 아이디, 비밀번호가 일치하는 유저의 아이디 조회 (로그인)
+	 * 
+	 * @param uDTO
+	 * @return 일치하는 유저 아이디, 없으면 빈 문자열
+	 * @throws SQLException
+	 */
+	public String login(UserDTO uDTO) throws SQLException {
+		String id = "";
 
-        String sql = "UPDATE USERS "
-                   + "SET PASSWORD = ?, USER_NAME = ?, EMAIL = ?, PHONE = ? "
-                   + "WHERE USER_ID = ?";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-        try {
-            conn = DbConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, pw);
-            pstmt.setString(2, name);
-            pstmt.setString(3, email);
-            pstmt.setString(4, phone);
-            pstmt.setString(5, id);
+		DBConnection dbCon = DBConnection.getInstance();
 
-            int result = pstmt.executeUpdate();
-            if (result > 0) {
-                isSuccess = true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbConnection.close(conn, pstmt);
-        }
+		try {
+			con = dbCon.getConn(dbCon.getProp(null));
+			StringBuilder selectLogin = new StringBuilder();
+			selectLogin
+			.append("	select user_id	")
+			.append("	from users	")
+			.append("	where user_id=? and password=? and is_deleted=1	");
 
-        return isSuccess;
-    }
+			pstmt = con.prepareStatement(selectLogin.toString());
+			pstmt.setString(1, uDTO.getUserId());
+			pstmt.setString(2, uDTO.getPassword());
+
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				id = rs.getString("user_id");
+			}
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		return id;
+	}
+
+	/**
+	 * 특정 유저 정보 조회
+	 * 
+	 * @param userId
+	 * @return UserDTO, 없으면 null
+	 * @throws SQLException
+	 */
+	public UserDTO selectByUserId(String userId) throws SQLException {
+		UserDTO uDTO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DBConnection dbCon = DBConnection.getInstance();
+
+		try {
+			con = dbCon.getConn(dbCon.getProp(null));
+			StringBuilder selectUser = new StringBuilder();
+			selectUser
+			.append("	select user_id, user_name, email, phone, user_grade,	")
+			.append("			to_char(join_date, 'yyyy-mm-dd') join_date	")
+			.append("	from users	")
+			.append("	where user_id=? and is_deleted=1	");
+
+			pstmt = con.prepareStatement(selectUser.toString());
+			pstmt.setString(1, userId);
+
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				uDTO = new UserDTO(rs.getString("user_id"), rs.getString("user_name"), rs.getString("email"),
+						rs.getString("phone"), rs.getString("user_grade"), rs.getString("join_date"));
+			}
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		return uDTO;
+	}
+
 }

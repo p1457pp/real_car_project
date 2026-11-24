@@ -28,7 +28,7 @@ public class UserCarEditFormEvt implements ActionListener {
 		this.ucef = ucef;
 		this.vehicleId = vehicleId;
 		searchAllManufacturer(); // 콤보박스에 제조사 설정
-		loadCarInfo(); // 선택한 차량 정보를 입력칸에 설정
+		searchCarByVehicleId(vehicleId); // 선택한 차량 정보를 입력칸에 설정
 	}// UserCarEditFormEvt
 
 	@Override
@@ -58,11 +58,10 @@ public class UserCarEditFormEvt implements ActionListener {
 			ucef.getJcbManufacturer().addItem(mDTO); // 가져온 정보를 추가
 		} // end for
 	}// searchAllManufacturer
-
 	/**
 	 * 선택한 차량 정보를 조회하여 입력칸에 설정하는 메소드
 	 */
-	public void loadCarInfo() {
+	public void searchCarByVehicleId(int vehicleId) {
 		UserCarService ucs = new UserCarService(); // ucs 연결
 		CarDTO cDTO = ucs.searchCarByVehicleId(vehicleId); // ucs의 현재 유저아이디의 차 정보 가져오기
 
@@ -95,16 +94,16 @@ public class UserCarEditFormEvt implements ActionListener {
 		
 		// 유저가 이전에 선택한 연료타입을 그대로 설정
 		String fuel = cDTO.getFuelType();
-		if (fuel.equals("휘발유")) {
+		if ("휘발유".equals(fuel)) {
 			ucef.getJrbGasoline().setSelected(true);
 		} // end if
-		if (fuel.equals("경유")) {
+		if ("경유".equals(fuel)) {
 			ucef.getJrbDiesel().setSelected(true);
 		} // end if
-		if (fuel.equals("LPG")) {
+		if ("LPG".equals(fuel)) {
 			ucef.getJrbLpg().setSelected(true);
 		} // end if
-		if (fuel.equals("전기")) {
+		if ("전기".equals(fuel)) {
 			ucef.getJrbElectric().setSelected(true);
 		} // end if
 

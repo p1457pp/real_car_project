@@ -1,5 +1,12 @@
 package user.car_view;
 
+import car_util.UiStyle;
+
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,14 +18,9 @@ import javax.swing.JTextField;
 import car_dto.ManufacturerDTO;
 import user.car_evt.UserCarRegisterFormEvt;
 
-import javax.swing.BorderFactory;
-import java.awt.Color;
-import java.awt.Font;
-
 public class UserCarRegisterForm extends JPanel {
-
-    private JLabel jlblTitle, jlblPhoto, JlblCarNum, JlblCarModel, 
-    			   JlblManufacturer, JlblCarYear, JlblFuel, JlblMileage, JlblKm;
+	private JLabel jlblTitle, jlblPhoto, jlblCarNum, jlblCarModel,
+			jlblManufacturer, jlblCarYear, jlblFuel, jlblMileage, jlblKm;
     private JLabel jlblGasoline, jlblDiesel, jlblLpg, jlblElectric;
     private JTextField jtfCarNum, jtfCarModel, jtfCarYear, jtfMileage;
     
@@ -35,10 +37,18 @@ public class UserCarRegisterForm extends JPanel {
     public UserCarRegisterForm(String userId) {
         this.userId = userId;
         initLayout();
+
+		UiStyle.apply(this);
     }
 
     public UserCarRegisterForm() {
         initLayout();
+
+		UiStyle.apply(this);
+	}
+
+	public String getUserId() {
+		return userId;
     }
 
     private void initLayout() {
@@ -59,48 +69,43 @@ public class UserCarRegisterForm extends JPanel {
         jbtnPhoto = new JButton("사진선택");
         jbtnPhoto.setBounds(110, 380, 120, 30);
         add(jbtnPhoto);
-
-        JlblCarNum = new JLabel("차량번호");
-        JlblCarNum.setFont(fontBold);
-        JlblCarNum.setBounds(350, 105, 80, 30);
-        add(JlblCarNum);
+		jlblCarNum = new JLabel("차량번호");
+		jlblCarNum.setFont(fontBold);
+		jlblCarNum.setBounds(350, 105, 80, 30);
+		add(jlblCarNum);
 
         jtfCarNum = new JTextField();
         jtfCarNum.setBounds(450, 105, 250, 30);
         add(jtfCarNum);
-
-        JlblCarModel = new JLabel("차종");
-        JlblCarModel.setFont(fontBold);
-        JlblCarModel.setBounds(350, 155, 80, 30);
-        add(JlblCarModel);
+		jlblCarModel = new JLabel("차종");
+		jlblCarModel.setFont(fontBold);
+		jlblCarModel.setBounds(350, 155, 80, 30);
+		add(jlblCarModel);
 
         jtfCarModel = new JTextField();
         jtfCarModel.setBounds(450, 155, 250, 30);
         add(jtfCarModel);
-
-        JlblManufacturer = new JLabel("제조사");
-        JlblManufacturer.setFont(fontBold);
-        JlblManufacturer.setBounds(350, 205, 80, 30);
-        add(JlblManufacturer);
+		jlblManufacturer = new JLabel("제조사");
+		jlblManufacturer.setFont(fontBold);
+		jlblManufacturer.setBounds(350, 205, 80, 30);
+		add(jlblManufacturer);
 
         // 콤보박스 초기화 설정 변경
         jcbManufacturer = new JComboBox<ManufacturerDTO>();
         jcbManufacturer.setBounds(450, 205, 150, 30);
         add(jcbManufacturer);
-
-        JlblCarYear = new JLabel("연식");
-        JlblCarYear.setFont(fontBold);
-        JlblCarYear.setBounds(350, 255, 80, 30);
-        add(JlblCarYear);
+		jlblCarYear = new JLabel("연식");
+		jlblCarYear.setFont(fontBold);
+		jlblCarYear.setBounds(350, 255, 80, 30);
+		add(jlblCarYear);
 
         jtfCarYear = new JTextField();
         jtfCarYear.setBounds(450, 255, 250, 30);
         add(jtfCarYear);
-
-        JlblFuel = new JLabel("연료");
-        JlblFuel.setFont(fontBold);
-        JlblFuel.setBounds(350, 305, 80, 30);
-        add(JlblFuel);
+		jlblFuel = new JLabel("연료");
+		jlblFuel.setFont(fontBold);
+		jlblFuel.setBounds(350, 305, 80, 30);
+		add(jlblFuel);
 
         jrbGasoline = new JRadioButton();
         jrbDiesel = new JRadioButton();
@@ -132,20 +137,18 @@ public class UserCarRegisterForm extends JPanel {
         add(jrbDiesel);   add(jlblDiesel);
         add(jrbLpg);      add(jlblLpg);
         add(jrbElectric); add(jlblElectric);
-
-        JlblMileage = new JLabel("주행거리");
-        JlblMileage.setFont(fontBold);
-        JlblMileage.setBounds(350, 355, 80, 30);
-        add(JlblMileage);
+		jlblMileage = new JLabel("주행거리");
+		jlblMileage.setFont(fontBold);
+		jlblMileage.setBounds(350, 355, 80, 30);
+		add(jlblMileage);
 
         jtfMileage = new JTextField();
         jtfMileage.setBounds(450, 355, 210, 30);
         add(jtfMileage);
-
-        JlblKm = new JLabel("km");
-        JlblKm.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        JlblKm.setBounds(670, 355, 30, 30);
-        add(JlblKm);
+		jlblKm = new JLabel("km");
+		jlblKm.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+		jlblKm.setBounds(670, 355, 30, 30);
+		add(jlblKm);
 
         jbtnRegister = new JButton("등록");
         jbtnRegister.setBounds(290, 530, 85, 32);

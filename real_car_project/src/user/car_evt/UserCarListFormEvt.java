@@ -12,32 +12,32 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import car_dto.CarDTO;
-import user.UserMainTap;
+import user.UserMainTab;
 import user.car_service.UserCarService;
 import user.car_view.UserCarEditForm;
 import user.car_view.UserCarListForm;
 import user.car_view.UserCarRegisterForm;
+import user.car_view.UserMaintenanceForm;
 
 
 
 public class UserCarListFormEvt implements ActionListener {
 
 	private UserCarListForm uclf;
-	private UserMainTap umt;
+	private UserMainTab umt;
 	private JTabbedPane jtpUser;
 	private String userId;
 
 	// 테이블 모델의 컬럼 번호
 	public static final int VEHICLE_ID = 0; // 화면에는 안 보이는 숨김 컬럼
-
-	public UserCarListFormEvt(UserCarListForm uclf, UserMainTap umt, JTabbedPane jtpUser, String userId) {
+	public UserCarListFormEvt(UserCarListForm uclf, UserMainTab umt, JTabbedPane jtpUser, String userId) {
 		this.uclf = uclf;
 		this.umt = umt;
 		this.jtpUser = jtpUser;
 		// this.userId = userId;
-		this.userId = "user028"; // 로그인 연동 후 위 줄로 교체
+		this.userId = userId; // 로그인 연동 후 위 줄로 교체
 		setPhotoColumn(); //기본 사진 설정
-		loadMyCarInfo(); // JTable에 값 설정
+		searchCarByUserId(userId); // JTable에 값 설정
 	}// UserCarListFormEvt
 
 	@Override
@@ -53,12 +53,21 @@ public class UserCarListFormEvt implements ActionListener {
 		if (ae.getSource() == uclf.getJbtnCarDelete()) {
 			removeCar();
 		} // end if
-	}// actionPerformed
 
+		if (ae.getSource() == uclf.getJbtShowCarMaintenance()) {
+			int row = uclf.getJtUserCarList().getSelectedRow();
+			if (row == -1) {
+				JOptionPane.showMessageDialog(uclf, "정비이력을 볼 차량을 선택해주세요.");
+				return;
+	}// actionPerformed
 	/**
 	 * 내 차량을 조회하여 JTable에 설정하는 일 (삭제된 차량은 조회되지 않는다)
 	 */
-	public void loadMyCarInfo() {
+			moveMaintenance(Integer.parseInt(uclf.getDtmCarList().getValueAt(row, VEHICLE_ID).toString()));
+		}
+	}
+
+	public void searchCarByUserId(String userId) {
 		UserCarService ucs = new UserCarService(); // ucs 연결
 		List<CarDTO> listCar = ucs.searchCarByUserId(userId); // 선택된 유저의 차 리스트 가져오기
 
@@ -120,7 +129,7 @@ public class UserCarListFormEvt implements ActionListener {
 	 * 차량 등록 화면으로 이동하는 일
 	 */
 	public void moveCarRegister() {
-		UserCarRegisterForm ucrf = new UserCarRegisterForm(); // 해당 form 연결
+		UserCarRegisterForm ucrf = new UserCarRegisterForm(userId); // 해당 form 연결
 		// 취소 버튼을 누르면 목록 화면으로 돌아온다.
 		ucrf.getJbtnCancel().addActionListener(new ActionListener() {
 			@Override
@@ -129,17 +138,57 @@ public class UserCarListFormEvt implements ActionListener {
 			}
 		});
 
-		jtpUser.setComponentAt(1, ucrf); // 탭을 2번쨰로 설정 0 - 회원 2 - 차량 3 - 예약 4 - 정비
-		jtpUser.revalidate(); // 바뀐 레이아웃 다시계산
-		jtpUser.repaint(); // 계산된 레이아웃으로 다시 화면 설정
+		if (jtpUser != null && jtpUser.getTabCount() > 1) {
+			jtpUser.setComponentAt(1, ucrf); // 탭을 2번쨰로 설정 0 - 회원 2 - 차량 3 - 예약 4 - 정비
+			jtpUser.revalidate(); // 바뀐 레이아웃 다시계산
+			jtpUser.repaint(); // 계산된 레이아웃으로 다시 화면 설정
+		}
 	}// moveCarRegister
 
 	/**
 	 * 차량 목록 화면으로 돌아오는 일
 	 */
 	public void moveCarList() {
-		jtpUser.setComponentAt(1, uclf); // 탭을 2번쨰로 설정 0 - 회원 2 - 차량 3 - 예약 4 - 정비
-		loadMyCarInfo(); // JTable을 최신 데이터로 갱신
+		if (jtpUser != null && jtpUser.getTabCount() > 1) {
+			jtpUser.setComponentAt(1, uclf); // 탭을 2번쨰로 설정 0 - 회원 2 - 차량 3 - 예약 4 - 정비
+			searchCarByUserId(userId); // JTable을 최신 데이터로 갱신
+			jtpUser.revalidate(); // 바뀐 레이아웃 다시계산
+			jtpUser.repaint(); // 계산된 레이아웃으로 다시 화면 설정
+		}
+	}// moveCarList
+
+	/**
+	 * 선택한 차량의 정비이력 탭으로 이동한다.
+	 * 
+	 * @param vehicleId 차량 ID
+	 */
+	public void moveMaintenance(int vehicleId) {
+		String carNum = null;
+		DefaultTableModel dtm = uclf.getDtmCarList();
+		for (int i = 0; i < dtm.getRowCount(); i++) {
+			if (Integer.parseInt(dtm.getValueAt(i, VEHICLE_ID).toString()) == vehicleId) {
+				carNum = dtm.getValueAt(i, 2).toString();
+				break;
+			}
+		}
+
+		if (jtpUser == null || jtpUser.getTabCount() <= 3) {
+			return;
+		}
+
+		UserMaintenanceForm umf = new UserMaintenanceForm(umt, jtpUser, userId);
+		if (carNum != null) {
+			for (int i = 0; i < umf.getJcbCar().getItemCount(); i++) {
+				if (umf.getJcbCar().getItemAt(i).startsWith(carNum)) {
+					umf.getJcbCar().setSelectedIndex(i);
+					break;
+				}
+			}
+			umf.getJbtnSearch().doClick();
+		}
+
+		jtpUser.setComponentAt(3, umf);
+		jtpUser.setSelectedIndex(3);
 		jtpUser.revalidate();  // 바뀐 레이아웃 다시계산
 		jtpUser.repaint(); // 계산된 레이아웃으로 다시 화면 설정
 	}// moveCarList
@@ -161,8 +210,7 @@ public class UserCarListFormEvt implements ActionListener {
 
 		UserCarEditForm ucef = new UserCarEditForm(umt, vehicleId); // form 연결
 		ucef.setVisible(true); //form의 다이얼로그 띄우기
-
-		loadMyCarInfo(); // 수정 창이 닫히면 최신 데이터로 갱신
+		searchCarByUserId(userId); // 수정 창이 닫히면 최신 데이터로 갱신
 	}// openEdit
 
 	/**
@@ -180,11 +228,17 @@ public class UserCarListFormEvt implements ActionListener {
 		// 선택된 행의 번호로 vehicleID 설정
 		int vehicleId = Integer.parseInt(uclf.getDtmCarList().getValueAt(row, VEHICLE_ID).toString());
 
+		if (JOptionPane.showConfirmDialog(uclf, "선택한 차량을 삭제하시겠습니까?", "삭제 확인",
+				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+			return;
+		} // end if
+
 		UserCarService ucs = new UserCarService(); // ucs 연결
 
 		// 선택된 행으로 UCS의 removeCarInfo실행
 		if (ucs.removeCarInfo(vehicleId)) {
-			loadMyCarInfo(); // 'Y'가 된 차량은 조회되지 않는다.
+			JOptionPane.showMessageDialog(uclf, "삭제되었습니다.");
+			searchCarByUserId(userId); // 'Y'가 된 차량은 조회되지 않는다.
 		} else { // 예외 떨어졋을 경우
 			JOptionPane.showMessageDialog(uclf, "삭제에 실패했습니다.");
 		} // end if
