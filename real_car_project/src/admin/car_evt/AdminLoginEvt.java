@@ -1,15 +1,15 @@
 package admin.car_evt;
 
-import java.awt.event.ActionEvent; 
+import java.awt.event.ActionEvent;  
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
+import admin.AdminMainTab;
 import admin.car_service.AdminLoginService;
 import admin.car_view.AdminLoginForm;
-import admin.car_view.AdminMainForm;
 import admin.car_view.AdminMemberManagementPanel;
 import car_dto.AdminLoginDTO;
 
@@ -56,7 +56,7 @@ public class AdminLoginEvt extends WindowAdapter implements ActionListener {
 				return;
 			}
 		
-		new AdminMainForm();
+		new AdminMainTab();
 		alf.dispose();
 	}
 	

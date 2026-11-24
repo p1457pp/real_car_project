@@ -97,7 +97,7 @@ public class AdminMemberManagementEvt implements ActionListener {
 		 ammf.setEditMode(true);
 		 ammf.getChangeJbtn().setText("수정완료");
 		 ammf.getDeleteJbtn().setEnabled(false);   // 편집 중 삭제 방지
-		 JOptionPane.showMessageDialog(ammf, "수정할 셀을 더블클릭해서 입력한 뒤 Enter를 누르고,\n끝나면 [수정완료] 버튼을 눌러주세요.");
+		 JOptionPane.showMessageDialog(ammf, "수정할 회원을 더블클릭해서 입력한 뒤 Enter를 누르고,\n끝나면 수정완료 버튼을 눌러주세요.");
 	}
 	
 	public void finishEdit() {

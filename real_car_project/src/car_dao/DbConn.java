@@ -40,7 +40,7 @@ public class DbConn {
 	public Properties getProp(String path) {
 		Properties prop=null;
 		if(path == null || "".equals(path)) {
-			path="c:/dev/config/database_project.properties";
+			path="c:/dev/config/database.properties";
 		}
 		
 		File readProp=new File(path);
