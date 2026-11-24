@@ -41,8 +41,8 @@ public class UserDAO {
 			con = dbCon.getConn(dbCon.getProp(null));
 			StringBuilder insertUser = new StringBuilder();
 			insertUser
-			.append("	insert into users (user_id, password, user_name, email, phone, user_grade, role, join_date, is_deleted)	")
-			.append("	values(?, ?, ?, ?, ?, '일반', 'USER', sysdate, 1)	");
+			.append("	insert into users (user_id, password, user_name, email, phone, user_grade, join_date, is_deleted)	")
+			.append("	values(?, ?, ?, ?, ?, '일반', sysdate, 1)	");
 
 			pstmt = con.prepareStatement(insertUser.toString());
 			pstmt.setString(1, uDTO.getUserId());
