@@ -146,7 +146,7 @@ public class AdminDAO {
 			cnt = pstmt.executeUpdate();
 
 			// 2) 회원의 차량도 소프트삭제 (예약/정비 이력은 행을 보존하고, 조회에서만 숨김)
-			pstmtCar = con.prepareStatement("	update car_info set delete_state='Y' where user_id=?	");
+			pstmtCar = con.prepareStatement("	update car_info set is_deleted=0 where user_id=?	");
 			pstmtCar.setString(1, userId);
 			pstmtCar.executeUpdate();
 
