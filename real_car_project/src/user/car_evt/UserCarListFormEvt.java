@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -103,9 +104,12 @@ public class UserCarListFormEvt implements ActionListener {
 					setIcon(null); // 사진이 없으면 빈칸
 					setText(""); // 이미지정보 byte의 배열갑을 안보이게한다.
 				} // end if
+				
 			}// setValue
 		};
 
+		renderer.setHorizontalAlignment(JLabel.CENTER);
+		
 		// JTable 화면 기준 0번째 컬럼이 사진이기 떄문에 방금 설정한 renderer를 설정한다.
 		uclf.getJtUserCarList().getColumnModel().getColumn(0).setCellRenderer(renderer);
 	}// setPhotoColumn
