@@ -6,6 +6,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/dev/WINDOWS.X64_213000_db_home/jdbc/lib/ojdbc8.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/dev/framework/lombok.jar"/>
+	<classpathentry kind="lib" path="C:/dev/drivers/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="C:/dev/libs/sist_util.jar"/>
+>>>>>>> branch 'kdg' of https://github.com/p1457pp/real_car_project.git
 	<classpathentry kind="output" path="bin"/>
 </classpath>
