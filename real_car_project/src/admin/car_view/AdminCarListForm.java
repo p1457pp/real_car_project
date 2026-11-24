@@ -1,5 +1,7 @@
 package admin.car_view;
 
+import car_util.UiStyle;
+
 import java.awt.Font;
 
 import javax.swing.JButton;
@@ -11,8 +13,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-import admin.AdminMainTap;
+import admin.AdminMainTab;
 import admin.car_evt.AdminCarListFormEvt;
 
 
@@ -27,8 +28,7 @@ public class AdminCarListForm extends JPanel {
     private JTable jtCar;
     private DefaultTableModel dtmCar;
     private JScrollPane jsp;
-
-    public AdminCarListForm(AdminMainTap amt, JTabbedPane jtpAdmin) {
+	public AdminCarListForm(AdminMainTab amt, JTabbedPane jtpAdmin) {
         setLayout(null);
 
         jlblTitle = new JLabel("회원 차량 목록");
@@ -68,6 +68,8 @@ public class AdminCarListForm extends JPanel {
         
         jbtnModify .addActionListener(evt);
         jbtnDeleteState.addActionListener(evt);
+
+		UiStyle.apply(this);
     }
 
     public JButton getJbtnModify() {

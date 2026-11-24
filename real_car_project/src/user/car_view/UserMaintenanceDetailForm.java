@@ -1,259 +1,142 @@
 package user.car_view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.RenderingHints;
-import java.text.DecimalFormat;
-import java.util.List;
+import car_util.UiStyle;
 
-import javax.swing.BorderFactory;
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
-import car_dao.MaintDAO;
-import car_dto.MaintDetailDTO;
-import car_dto.MaintReportDTO;
+import user.UserMainTab;
+import user.car_evt.UserMaintenanceDetailFormEvt;
 
 public class UserMaintenanceDetailForm extends JDialog {
-    private static final long serialVersionUID = 1L;
 
-    private int reportNo;
-    private MaintDAO maintDAO;
+	private JLabel jlblCarNum, jlblMaintenanceDate, jlblCarModel, jlblCenter, jlblStatus, jlblTotal;
+	private JTextArea jtaComment;
+	private JTable jtDetail;
+	private DefaultTableModel dtmDetail;
+	private JButton jbtnClose;
 
-    private JLabel lblDateVal;
-    private JLabel lblCenterVal;
-    private JLabel lblCarNumVal;
-    private JLabel lblCarModelVal;
-    private JLabel lblStatusVal;
-    private JLabel lblTotalPriceVal;
-    private JTextArea jtaMemo;
-    private DefaultTableModel dtmDetail;
+	public UserMaintenanceDetailForm(UserMainTab umt, int reportNo) {
+		super(umt, "정비 상세 명세서 (No. " + reportNo + ")", true);
+		setLayout(null);
 
-    private final DecimalFormat priceFormat = new DecimalFormat("#,###");
+		jlblMaintenanceDate = addInfo("정비일자", 20, 20);
+		jlblCenter = addInfo("정비지점", 340, 20);
+		jlblCarNum = addInfo("차량번호", 20, 55);
+		jlblCarModel = addInfo("차종", 340, 55);
+		jlblStatus = addInfo("진행상태", 20, 90);
 
-    public UserMaintenanceDetailForm(JFrame parent, int reportNo) {
-        super(parent, "정비 상세 명세서", true);
-        this.reportNo = reportNo;
-        this.maintDAO = new MaintDAO();
+		String[] columns = { "정비 항목", "부품단가", "수량", "공임비", "금액" };
+		dtmDetail = new DefaultTableModel(columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		jtDetail = new JTable(dtmDetail);
+		jtDetail.setRowHeight(30);
+		jtDetail.getTableHeader().setReorderingAllowed(false);
+		DefaultTableCellRenderer center = (DefaultTableCellRenderer) jtDetail.getDefaultRenderer(Object.class);
+		center.setHorizontalAlignment(JLabel.CENTER);
 
-        setSize(680, 600);
-        setLocationRelativeTo(parent);
+		JScrollPane jsp = new JScrollPane(jtDetail);
+		jsp.setBounds(20, 130, 620, 220);
+		add(jsp);
 
-        initComponents();
-        loadDetailData();
-    }
+		jlblTotal = new JLabel("총 청구 금액 : 0원");
+		jlblTotal.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		jlblTotal.setBounds(380, 360, 260, 25);
+		add(jlblTotal);
 
-    private void initComponents() {
-        JPanel mainPanel = new JPanel(new BorderLayout(0, 14));
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(new EmptyBorder(22, 24, 20, 24));
+		JLabel lblComment = new JLabel("정비사 코멘트");
+		lblComment.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+		lblComment.setBounds(20, 360, 150, 25);
+		add(lblComment);
 
-        JPanel headerPanel = new JPanel(new BorderLayout(0, 12));
-        headerPanel.setOpaque(false);
+		jtaComment = new JTextArea();
+		jtaComment.setEditable(false);
+		jtaComment.setLineWrap(true);
+		jtaComment.setWrapStyleWord(true);
+		JScrollPane jspMemo = new JScrollPane(jtaComment);
+		jspMemo.setBounds(20, 390, 620, 90);
+		add(jspMemo);
 
-        JLabel lblTitle = new JLabel("정비 상세 명세서 (No. " + reportNo + ")");
-        lblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        lblTitle.setForeground(new Color(30, 41, 59));
-        headerPanel.add(lblTitle, BorderLayout.NORTH);
+		jbtnClose = new JButton("닫기");
+		jbtnClose.setBounds(290, 495, 100, 30);
+		add(jbtnClose);
 
-        JPanel infoGrid = new JPanel(new GridLayout(3, 4, 8, 8));
-        infoGrid.setBackground(new Color(248, 250, 252));
-        infoGrid.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-                new EmptyBorder(12, 14, 12, 14)));
+		UserMaintenanceDetailFormEvt evt = new UserMaintenanceDetailFormEvt(this, reportNo);
+		jbtnClose.addActionListener(evt);
+		addWindowListener(evt);
+		evt.searchMaintenanceDetail(reportNo);
 
-        lblDateVal = createValueLabel("-");
-        lblCenterVal = createValueLabel("-");
-        lblCarNumVal = createValueLabel("-");
-        lblCarModelVal = createValueLabel("-");
-        lblStatusVal = createValueLabel("-");
+		setSize(680, 600);
+		setResizable(false);
+		setLocationRelativeTo(umt);
+		UiStyle.apply(this);
 
-        infoGrid.add(createKeyLabel("정비일자"));
-        infoGrid.add(lblDateVal);
-        infoGrid.add(createKeyLabel("정비지점"));
-        infoGrid.add(lblCenterVal);
-        infoGrid.add(createKeyLabel("차량번호"));
-        infoGrid.add(lblCarNumVal);
-        infoGrid.add(createKeyLabel("차종"));
-        infoGrid.add(lblCarModelVal);
-        infoGrid.add(createKeyLabel("진행상태"));
-        infoGrid.add(lblStatusVal);
-        infoGrid.add(new JLabel(""));
-        infoGrid.add(new JLabel(""));
+		setVisible(true);
+	}
 
-        headerPanel.add(infoGrid, BorderLayout.CENTER);
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+	/** 라벨(제목)과 값 라벨을 만들어 값 라벨을 반환한다. */
+	private JLabel addInfo(String key, int x, int y) {
+		JLabel k = new JLabel(key);
+		k.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+		k.setBounds(x, y, 80, 25);
+		add(k);
 
-        JPanel centerPanel = new JPanel(new BorderLayout(0, 12));
-        centerPanel.setOpaque(false);
+		JLabel v = new JLabel("-");
+		v.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+		v.setBounds(x + 80, y, 220, 25);
+		add(v);
+		return v;
+	}
 
-        String[] cols = {"정비 항목", "부품단가", "수량", "공임비", "금액"};
-        dtmDetail = new DefaultTableModel(cols, 0) {
-            private static final long serialVersionUID = 1L;
+	public JLabel getJlblCarNum() {
+		return jlblCarNum;
+	}
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+	public JLabel getJlblMaintenanceDate() {
+		return jlblMaintenanceDate;
+	}
 
-        JTable jtDetail = new JTable(dtmDetail);
-        jtDetail.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        jtDetail.setRowHeight(34);
-        jtDetail.setShowVerticalLines(false);
-        jtDetail.setGridColor(new Color(226, 232, 240));
+	public JLabel getJlblCarModel() {
+		return jlblCarModel;
+	}
 
-        JTableHeader th = jtDetail.getTableHeader();
-        th.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-        th.setBackground(new Color(241, 245, 249));
-        th.setPreferredSize(new Dimension(0, 34));
+	public JLabel getJlblCenter() {
+		return jlblCenter;
+	}
 
-        DefaultTableCellRenderer centerR = new DefaultTableCellRenderer();
-        centerR.setHorizontalAlignment(SwingConstants.CENTER);
-        DefaultTableCellRenderer rightR = new DefaultTableCellRenderer();
-        rightR.setHorizontalAlignment(SwingConstants.RIGHT);
-        rightR.setBorder(new EmptyBorder(0, 0, 0, 10));
+	public JLabel getJlblStatus() {
+		return jlblStatus;
+	}
 
-        jtDetail.getColumnModel().getColumn(0).setPreferredWidth(200);
-        jtDetail.getColumnModel().getColumn(1).setPreferredWidth(105);
-        jtDetail.getColumnModel().getColumn(1).setCellRenderer(rightR);
-        jtDetail.getColumnModel().getColumn(2).setPreferredWidth(105);
-        jtDetail.getColumnModel().getColumn(2).setCellRenderer(rightR);
-        jtDetail.getColumnModel().getColumn(3).setPreferredWidth(60);
-        jtDetail.getColumnModel().getColumn(3).setCellRenderer(centerR);
-        jtDetail.getColumnModel().getColumn(4).setPreferredWidth(120);
-        jtDetail.getColumnModel().getColumn(4).setCellRenderer(rightR);
+	public JLabel getJlblTotal() {
+		return jlblTotal;
+	}
 
-        JScrollPane tableScroll = new JScrollPane(jtDetail);
-        tableScroll.getViewport().setBackground(Color.WHITE);
-        tableScroll.setBorder(BorderFactory.createLineBorder(new Color(226, 232, 240), 1));
-        centerPanel.add(tableScroll, BorderLayout.CENTER);
+	public JTextArea getJtaComment() {
+		return jtaComment;
+	}
 
-        JPanel memoAndTotalPanel = new JPanel(new BorderLayout(0, 10));
-        memoAndTotalPanel.setOpaque(false);
+	public JTable getJtDetail() {
+		return jtDetail;
+	}
 
-        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 8));
-        totalPanel.setBackground(new Color(239, 246, 255));
-        totalPanel.setBorder(BorderFactory.createLineBorder(new Color(191, 219, 254), 1));
-        lblTotalPriceVal = new JLabel("총 청구 금액 : 0원");
-        lblTotalPriceVal.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        lblTotalPriceVal.setForeground(new Color(29, 78, 216));
-        totalPanel.add(lblTotalPriceVal);
-        memoAndTotalPanel.add(totalPanel, BorderLayout.NORTH);
+	public DefaultTableModel getDtmDetail() {
+		return dtmDetail;
+	}
 
-        JPanel memoBox = new JPanel(new BorderLayout(0, 6));
-        memoBox.setOpaque(false);
-        JLabel lblMemo = new JLabel("정비사 코멘트");
-        lblMemo.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-        lblMemo.setForeground(new Color(71, 85, 105));
-
-        jtaMemo = new JTextArea(4, 20);
-        jtaMemo.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        jtaMemo.setLineWrap(true);
-        jtaMemo.setWrapStyleWord(true);
-        jtaMemo.setEditable(false);
-        jtaMemo.setBackground(new Color(248, 250, 252));
-        jtaMemo.setBorder(new EmptyBorder(8, 10, 8, 10));
-
-        JScrollPane memoScroll = new JScrollPane(jtaMemo);
-        memoScroll.setBorder(BorderFactory.createLineBorder(new Color(226, 232, 240), 1));
-        memoBox.add(lblMemo, BorderLayout.NORTH);
-        memoBox.add(memoScroll, BorderLayout.CENTER);
-        memoAndTotalPanel.add(memoBox, BorderLayout.CENTER);
-
-        centerPanel.add(memoAndTotalPanel, BorderLayout.SOUTH);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        bottomPanel.setOpaque(false);
-        JButton jbtnClose = createRoundedButton("닫기", new Color(71, 85, 105), Color.WHITE, 110, 36);
-        jbtnClose.addActionListener(e -> dispose());
-        bottomPanel.add(jbtnClose);
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-        setContentPane(mainPanel);
-    }
-
-    private void loadDetailData() {
-        MaintReportDTO report = maintDAO.selectMaintReportByNo(reportNo);
-        if (report != null) {
-            lblDateVal.setText(report.getMaintDate() != null ? report.getMaintDate() : "-");
-            lblCenterVal.setText(report.getCenterName() != null ? report.getCenterName() : "-");
-            lblCarNumVal.setText(report.getCarNum() != null ? report.getCarNum() : "-");
-            lblCarModelVal.setText(report.getCarModel() != null ? report.getCarModel() : "-");
-            String statusStr = (report.getStatus() >= 1) ? "정비완료" : "대기";
-            lblStatusVal.setText(statusStr);
-            lblTotalPriceVal.setText("총 청구 금액 : " + priceFormat.format(report.getTotalPrice()) + "원");
-            jtaMemo.setText(report.getMechanicMemo() != null ? report.getMechanicMemo() : "");
-        }
-
-        dtmDetail.setRowCount(0);
-        List<MaintDetailDTO> details = maintDAO.selectMaintDetailsByReportNo(reportNo);
-        for (MaintDetailDTO d : details) {
-            dtmDetail.addRow(new Object[]{
-                d.getItemName(),
-                priceFormat.format(d.getItemPrice()) + "원",
-                d.getQty(),
-                priceFormat.format(d.getLabCost()) + "원",
-                priceFormat.format(d.getTotalPrice()) + "원"
-            });
-        }
-    }
-
-    private JLabel createKeyLabel(String text) {
-        JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-        lbl.setForeground(new Color(100, 116, 139));
-        return lbl;
-    }
-
-    private JLabel createValueLabel(String text) {
-        JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-        lbl.setForeground(new Color(30, 41, 59));
-        return lbl;
-    }
-
-    private JButton createRoundedButton(String text, Color bg, Color fg, int width, int height) {
-        JButton btn = new JButton(text) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        btn.setPreferredSize(new Dimension(width, height));
-        btn.setBackground(bg);
-        btn.setForeground(fg);
-        btn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
+	public JButton getJbtnClose() {
+		return jbtnClose;
+	}
 }

@@ -26,7 +26,7 @@ public class UserCarRegisterFormEvt implements ActionListener {
 
 	public UserCarRegisterFormEvt(UserCarRegisterForm ucrf) {
 		this.ucrf = ucrf;
-		loadAllManufacturer(); // 콤보박스에 제조사 설정
+		searchAllManufacturer(); // 콤보박스에 제조사 설정
 	}// UserCarRegisterFormEvt
 
 	@Override
@@ -39,11 +39,10 @@ public class UserCarRegisterFormEvt implements ActionListener {
 			addCar();
 		} // end if
 	}// actionPerformed
-
 	/**
 	 * 제조사를 모두 조회하여 JComboBox에 설정하는 일
 	 */
-	public void loadAllManufacturer() {
+	public void searchAllManufacturer() {
 		UserCarService ucs = new UserCarService(); // ucs 연결
 		// 제조사 정보 가져오기
 		List<ManufacturerDTO> listManufacturer = ucs.searchAllManufacturer();
@@ -163,7 +162,8 @@ public class UserCarRegisterFormEvt implements ActionListener {
 		cDTO.setMileage(intMileage);
 		cDTO.setCarPhoto(selectedPhoto);
 		cDTO.setManufacturerId(mDTO.getManufacturerId());
-		cDTO.setUserId("user028"); // TODO: 로그인 연동 후 교체
+		String targetUserId = (ucrf.getUserId() != null && !ucrf.getUserId().trim().isEmpty()) ? ucrf.getUserId().trim() : "";
+		cDTO.setUserId(targetUserId);
 
 		// UCS 연결
 		UserCarService ucs = new UserCarService();

@@ -1,6 +1,8 @@
 
 package admin.car_view;
 
+import car_util.UiStyle;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -29,8 +31,8 @@ public class StatusButtonRendererAdmin extends JButton implements TableCellRende
         setText(cellText);
         
         if(column==4) {
-        	
-        	setBackground(new Color(0, 140, 255));
+			setBackground(UiStyle.BLUE);
+			setForeground(Color.WHITE);
         }
         
         if(column==5) {
@@ -45,8 +47,8 @@ public class StatusButtonRendererAdmin extends JButton implements TableCellRende
         if(column==6) {
         	
         	if("예약대기".equals(cellText)) {
-        		 setBackground(new Color(0, 140, 255)); // 노란색 계열
-                 setForeground(Color.BLACK);
+				setBackground(UiStyle.BLUE); // 노란색 계열
+				setForeground(Color.WHITE);
                  setEnabled(true);
         	}  
         	if("예약확정".equals(cellText)) {

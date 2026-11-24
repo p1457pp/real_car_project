@@ -9,7 +9,7 @@ import java.util.List;
 
 import car_dto.CarDTO;
 import car_dto.ManufacturerDTO;
-import car_util.DbConn;
+import car_util.DBConnection;
 
 
 public class CarDAO {
@@ -35,8 +35,7 @@ public class CarDAO {
 	public void insertCar(CarDTO cDTO) throws SQLException {
 		Connection con = null; // DB연결관리, Transaction처리, 쿼리문 생성객체얻는일
 		PreparedStatement pstmt = null; // 쿼리문 전처리하여 생성, 쿼리 실행
-
-		DbConn dbCon = DbConn.getInstance(); // DB 연결
+		DBConnection dbCon = DBConnection.getInstance(); // DB 연결
 
 		try {
 			// 1.드라이버로딩
@@ -47,7 +46,7 @@ public class CarDAO {
 			insertCar
 			.append("	insert into car_info (vehicle_id, car_num, car_model, car_year, fuel_type,	")
 			.append("					mileage, car_photo, car_scrapped, add_date, manufacturer_id, user_id, delete_state)	")
-			.append("	values(seq_car.nextval, ?, ?, ?, ?, ?, ?, 'N', sysdate, ?, ?, 'N')	");
+			.append("	values(seq_car_info.nextval, ?, ?, ?, ?, ?, ?, 'N', sysdate, ?, ?, 'N')	");
 		
 			pstmt = con.prepareStatement(insertCar.toString());
 			// 4.바인드변수 값 설정
@@ -82,8 +81,7 @@ public class CarDAO {
 		int cnt=0;
 		Connection con = null; // DB연결관리, Transaction처리, 쿼리문 생성객체얻는일
 		PreparedStatement pstmt = null; // 쿼리문 전처리하여 생성, 쿼리 실행
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			// 1.드라이버로딩
@@ -132,7 +130,7 @@ public class CarDAO {
 	    int cnt = 0;
 	    Connection con = null;
 	    PreparedStatement pstmt = null; 
-	    DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 	    try {
 	        con = dbCon.getConn(dbCon.getProp(null));
 	        pstmt = con.prepareStatement("update car_info set delete_state='Y' where vehicle_id=?");
@@ -156,8 +154,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩
@@ -217,8 +214,7 @@ public class CarDAO {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
-
-	    DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 	    try {
 	    	//1.드라이버 로딩
@@ -278,8 +274,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩
@@ -335,8 +330,7 @@ public class CarDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
-		DbConn dbCon = DbConn.getInstance();  // DB 연결
+		DBConnection dbCon = DBConnection.getInstance();  // DB 연결
 
 		try {
 			//1.드라이버 로딩

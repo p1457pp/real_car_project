@@ -1,5 +1,7 @@
 package user.car_view;
 
+import car_util.UiStyle;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -13,7 +15,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import car_dto.ManufacturerDTO;
-import user.UserMainTap;
+import user.UserMainTab;
 import user.car_evt.UserCarEditFormEvt;
 
 
@@ -31,9 +33,8 @@ public class UserCarEditForm extends JDialog {
 
 	private JComboBox<ManufacturerDTO> jcbManufacturer; // 타입 변경
 	private Font fontBold;
-
 	// 생성자에 vehicleId 추가
-	public UserCarEditForm(UserMainTap umt, int vehicleId) {
+	public UserCarEditForm(UserMainTab umt, int vehicleId) {
 		setLayout(null);
 
 		fontBold = new Font("맑은 고딕", Font.BOLD, 14);
@@ -166,6 +167,8 @@ public class UserCarEditForm extends JDialog {
 		setSize(720, 485);
 		setLocationRelativeTo(umt);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		UiStyle.apply(this);
 	}
 
 	public JButton getJbtnPhoto() {
