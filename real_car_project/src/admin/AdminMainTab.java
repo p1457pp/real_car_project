@@ -1,8 +1,5 @@
 package admin;
 
-import car_util.UiStyle;
-
-import java.awt.BorderLayout;
 import java.awt.Font;
 
 import javax.swing.JButton;
@@ -17,9 +14,10 @@ import admin.car_view.AdminMaintenanceForm;
 import admin.car_view.AdminMaintenanceRevenueForm;
 import admin.car_view.AdminMemberForm;
 import admin.car_view.AdminReservationListForm;
+import car_util.UiStyle;
 
 public class AdminMainTab extends JFrame {
-
+	
 	private JTabbedPane jtpAdmin;
 	private JButton jbtnLogout;
 
