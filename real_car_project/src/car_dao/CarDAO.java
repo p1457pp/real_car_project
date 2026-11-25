@@ -376,4 +376,5 @@ public class CarDAO {
 		}
 		return listManufacturer; // 제조사 정보 리스트 반환
 	}//selectAllManufacturers
+
 }
