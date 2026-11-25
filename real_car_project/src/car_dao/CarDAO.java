@@ -227,12 +227,13 @@ public class CarDAO {
 	    	//3.쿼리문 생성객체 얻기
 	        StringBuilder selectCar = new StringBuilder();
 	        selectCar
-	        .append("	select	vehicle_id, car_num, car_model, car_year, fuel_type,	")
-	        .append("			mileage, car_scrapped, car_photo, add_date, manufacturer_id, user_id, is_deleted	")
-	        .append("	from	car_info		")
-	        .append("	where	user_id = ?		")
-	        .append("	and		is_deleted = 0	")
-	        .append("	order by vehicle_id		");
+	        .append("	select	c.vehicle_id, c.car_num, c.car_model, c.car_year, c.fuel_type,	")
+	        .append("			c.mileage, c.car_scrapped, c.add_date, c.manufacturer_id, c.user_id,	")
+	        .append("			c.is_deleted, m.manufacturer	")
+	        .append("	from	car_info c left join car_manufacturer m		")
+	        .append("	on		c.manufacturer_id = m.manufacturer_id		")
+	        .append("	where	nvl(c.is_deleted, 0) = 0	")
+	        .append("	order by c.vehicle_id		");
 
 	        pstmt = con.prepareStatement(selectCar.toString());
 	        pstmt.setString(1, userId);
