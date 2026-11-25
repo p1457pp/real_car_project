@@ -275,6 +275,7 @@ public class UserCarListFormEvt implements ActionListener {
 			return;
 		} // end if
 
+		
 		UserCarService ucs = new UserCarService(); // ucs 연결
 
 		// 선택된 행으로 UCS의 removeCarInfo실행
