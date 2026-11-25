@@ -38,7 +38,7 @@ public class AdminCarListForm extends JPanel {
 
         String[] columns = {"차량ID", "차량번호", "차종", "제조사", "연식", "회원ID"};
         dtmCar = new DefaultTableModel(columns, 0);
-
+        
         jtCar = new JTable(dtmCar);
         jtCar.setRowHeight(30);
         jtCar.setDefaultEditor(Object.class, null); // 셀 직접 수정 막기
