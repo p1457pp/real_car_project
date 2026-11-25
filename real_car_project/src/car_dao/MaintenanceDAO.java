@@ -1,4 +1,4 @@
-package car_dao;
+	package car_dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import car_dto.MaintenanceDetailDTO;
 import car_dto.MaintenanceDTO;
+import car_dto.MaintenanceDetailDTO;
 import car_dto.RepairItemDTO;
 import car_dto.SettlementDTO;
 import car_util.DBConnection;
@@ -84,12 +84,15 @@ public class MaintenanceDAO {
             sql.append("AND c.CAR_NUM = ? ");
         }
         if ("최근 1개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -1) ");
-        } else if ("최근 3개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -3) ");
-        } else if ("최근 6개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -6) ");
-        }
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -1) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		} else if ("최근 3개월".equals(period)) {
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -3) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		} else if ("최근 6개월".equals(period)) {
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -6) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		}
         sql.append("ORDER BY m.MAINT_DATE DESC, m.REPORT_NO DESC");
 
         Connection con = null;
