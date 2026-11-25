@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import car_dto.AdminLoginDTO;
+import car_util.DBConnection;
 
 public class AdminLoginDAO {
 	private static AdminLoginDAO alDAO;
@@ -30,7 +31,7 @@ public class AdminLoginDAO {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 
-		DbConn dc=DbConn.getInstance();
+		DBConnection dc=DBConnection.getInstance();
 		Properties prop=dc.getProp(null);
 
 		try {

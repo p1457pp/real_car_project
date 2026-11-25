@@ -1,6 +1,6 @@
 package car_dao;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Properties;
 
 import car_dto.AdminMemberManagementDTO;
+import car_util.DBConnection;
 
 public class AdminMemberManagementDAO {
 
@@ -34,7 +35,7 @@ public class AdminMemberManagementDAO {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		DbConn dc=DbConn.getInstance();
+		DBConnection dc=DBConnection.getInstance();
 		Properties prop=dc.getProp(null);
 		
 		try {
@@ -71,7 +72,7 @@ public class AdminMemberManagementDAO {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 
-	    DbConn dc = DbConn.getInstance();
+	    DBConnection dc = DBConnection.getInstance();
 	    Properties prop = dc.getProp(null);
 
 	    try {
@@ -94,7 +95,7 @@ public class AdminMemberManagementDAO {
 		Connection con = null;
 	    PreparedStatement pstmt = null;
 
-	    DbConn dc = DbConn.getInstance();
+	    DBConnection dc = DBConnection.getInstance();
 	    Properties prop = dc.getProp(null);
 
 		try {

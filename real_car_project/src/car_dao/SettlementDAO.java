@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import car_dto.SettlementDTO;
+import car_util.DBConnection;
 
 public class SettlementDAO {
 
@@ -30,7 +31,7 @@ public class SettlementDAO {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 
-		DbConn dc=DbConn.getInstance();
+		DBConnection dc=DBConnection.getInstance();
 		Properties prop=dc.getProp(null);
 		
 		try {
