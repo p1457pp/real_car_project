@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import car_dto.CarDTO;
 import car_dto.ManufacturerDTO;
+import car_util.ImageResizer;
 import user.car_service.UserCarService;
 import user.car_view.UserCarEditForm;
 
@@ -81,7 +82,7 @@ public class UserCarEditFormEvt implements ActionListener {
 		photo = cDTO.getCarPhoto(); // 사진정보를 변수에 담기
 		if (photo != null) { // 사진이있으면
 			ucef.getJlblPhoto().setText(""); // 이미지없음 글자를 지우고
-			ucef.getJlblPhoto().setIcon(new ImageIcon(photo)); // 현재 이미지로 설정
+			ucef.getJlblPhoto().setIcon(ImageResizer.fit(photo, ucef.getJlblPhoto()));// 현재 이미지로 설정
 		} // end if
 
 		// 유저가 이전에 선택한 제조사타입을 그대로 설정
