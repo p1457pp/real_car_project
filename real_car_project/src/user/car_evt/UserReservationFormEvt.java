@@ -50,6 +50,7 @@ public class UserReservationFormEvt extends FocusAdapter implements ActionListen
 		}
 		if (e.getSource() == urf.getJtfCarNum()) {
 			findCarModel();
+		
 		}
 	}
 

@@ -29,10 +29,12 @@ public class UserReservationForm extends JPanel {
 	private DefaultTableModel dtmReservation;
 	private JButton jbtnRequest, jbtnList;
 	private JComboBox<String> jcbRepairItem;
+	
+	
 
-	public UserReservationForm(UserMainTab umt, JTabbedPane jtpUser, String userId) {
+	public UserReservationForm(UserMainTab umt, JTabbedPane jtpUser, String userId ) {
 		setLayout(null);
-
+		
 		jlblTitle = new JLabel("예약신청");
 		jlblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		jlblTitle.setBounds(10, 10, 100, 25);
@@ -64,7 +66,10 @@ public class UserReservationForm extends JPanel {
 
 		add(createLabel("차량번호", x, 50, lw));
 		jtfCarNum = new JTextField();
+		
 		jtfCarNum.setBounds(fx, 50, fw, 30);
+		jtfCarNum.setEditable(false);
+		
 		add(jtfCarNum);
 
 		add(createLabel("차종", x, 90, lw));
@@ -119,6 +124,12 @@ public class UserReservationForm extends JPanel {
 		lbl.setBounds(x, y, w, 30);
 		return lbl;
 	}
+	
+	
+	
+
+
+	
 
 	public JTextField getJtfCarNum() {
 		return jtfCarNum;
@@ -155,4 +166,6 @@ public class UserReservationForm extends JPanel {
 	public JComboBox<String> getJcbRepairItem() {
 		return jcbRepairItem;
 	}
+	
+	
 }
