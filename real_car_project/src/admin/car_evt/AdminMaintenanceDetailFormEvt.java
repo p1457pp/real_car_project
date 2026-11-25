@@ -53,7 +53,8 @@ public class AdminMaintenanceDetailFormEvt extends WindowAdapter implements Acti
 			removeSelectedItemRow();
 		}
 		if (e.getSource() == amdf.getJbtnComplete()) {
-			completeMaintenance();
+			boolean isComplete = "정비완료".equals(amdf.getJcbStatus().getSelectedItem());
+			save(isComplete);
 		}
 		if (e.getSource() == amdf.getJbtnCancel()) {
 			amdf.dispose();
@@ -101,6 +102,7 @@ public class AdminMaintenanceDetailFormEvt extends WindowAdapter implements Acti
 			if (report.getCenterName() != null) {
 				amdf.getJcbCenter().setSelectedItem(report.getCenterName());
 			}
+			amdf.getJcbStatus().setSelectedItem(report.getStatus() == 1 ? "정비완료" : "대기");
 			amdf.getJtaMemo().setText(report.getMechanicMemo() != null ? report.getMechanicMemo() : "");
 		}
 
@@ -245,6 +247,7 @@ public class AdminMaintenanceDetailFormEvt extends WindowAdapter implements Acti
 		mDTO.setCarNum(amdf.getJtfCarNum().getText().trim());
 		mDTO.setMaintDate(amdf.getJtfMaintenanceDate().getText().trim().replace(".", "-"));
 		mDTO.setCenterName((String) amdf.getJcbCenter().getSelectedItem());
+		mDTO.setStatus("정비완료".equals(amdf.getJcbStatus().getSelectedItem()) ? 1 : 0);
 		mDTO.setMechanicMemo(amdf.getJtaMemo().getText().trim());
 		mDTO.setMaintenanceInfo(details);
 		mDTO.setTotalPrice(ams.calcTotalPrice(mDTO));
@@ -279,7 +282,8 @@ public class AdminMaintenanceDetailFormEvt extends WindowAdapter implements Acti
 
 		int cnt = complete ? ams.completeMaintenance(mDTO) : ams.modifyMaintenance(mDTO);
 		if (cnt == 1) {
-			JOptionPane.showMessageDialog(amdf, "정비완료 처리 및 저장이 완료되었습니다.");
+			String msg = complete ? "정비완료 처리 및 저장이 완료되었습니다." : "정비 내역(대기) 저장이 완료되었습니다.";
+			JOptionPane.showMessageDialog(amdf, msg);
 			amdf.dispose();
 		} else {
 			JOptionPane.showMessageDialog(amdf, "저장 중 오류가 발생했습니다. 콘솔 로그를 확인해 주세요.");

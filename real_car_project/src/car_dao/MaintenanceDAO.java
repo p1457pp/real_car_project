@@ -9,8 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import car_dto.MaintenanceDetailDTO;
 import car_dto.MaintenanceDTO;
+import car_dto.MaintenanceDetailDTO;
 import car_dto.RepairItemDTO;
 import car_dto.SettlementDTO;
 import car_util.DBConnection;
@@ -84,12 +84,15 @@ public class MaintenanceDAO {
             sql.append("AND c.CAR_NUM = ? ");
         }
         if ("최근 1개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -1) ");
-        } else if ("최근 3개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -3) ");
-        } else if ("최근 6개월".equals(period)) {
-            sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -6) ");
-        }
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -1) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		} else if ("최근 3개월".equals(period)) {
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -3) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		} else if ("최근 6개월".equals(period)) {
+			sql.append("AND m.MAINT_DATE >= ADD_MONTHS(TRUNC(SYSDATE), -6) ");
+			sql.append("AND m.MAINT_DATE < TRUNC(SYSDATE) + 1 ");
+		}
         sql.append("ORDER BY m.MAINT_DATE DESC, m.REPORT_NO DESC");
 
         Connection con = null;
@@ -389,6 +392,10 @@ public class MaintenanceDAO {
 
     // 8. [관리자] 신규 정비 이력 등록 및 정비완료(1) 처리
     public boolean insertMaintenance(String carNum, String maintDate, String centerName, int totalPrice, String memo, List<MaintenanceDetailDTO> details) {
+        return insertMaintenance(carNum, maintDate, centerName, totalPrice, 1, memo, details);
+    }
+
+    public boolean insertMaintenance(String carNum, String maintDate, String centerName, int totalPrice, int status, String memo, List<MaintenanceDetailDTO> details) {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -410,14 +417,15 @@ public class MaintenanceDAO {
             pstmt.close();
 
             String insertReportSql = "INSERT INTO MAINT_REPORTS (REPORT_NO, MAINT_DATE, CENTER_NAME, TOTAL_PRICE, STATUS, MECHANIC_MEMO, REGIST_DATE, RESERVATION_CODE) "
-                                   + "VALUES (?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, 1, ?, SYSDATE, ?)";
+                                   + "VALUES (?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?, ?, SYSDATE, ?)";
             pstmt = con.prepareStatement(insertReportSql);
             pstmt.setInt(1, newReportNo);
             pstmt.setString(2, maintDate);
             pstmt.setString(3, centerName);
             pstmt.setInt(4, totalPrice);
-            pstmt.setString(5, memo);
-            pstmt.setString(6, reservCode);
+            pstmt.setInt(5, status);
+            pstmt.setString(6, memo);
+            pstmt.setString(7, reservCode);
             pstmt.executeUpdate();
             pstmt.close();
 
@@ -437,6 +445,10 @@ public class MaintenanceDAO {
 
     // 9. [관리자] 기존 정비 이력 수정 및 진행상태 '정비완료(1)'로 변경
     public boolean updateMaintenance(int reportNo, String carNum, String maintDate, int totalPrice, String memo, List<MaintenanceDetailDTO> details) {
+        return updateMaintenance(reportNo, carNum, maintDate, totalPrice, 1, memo, details);
+    }
+
+    public boolean updateMaintenance(int reportNo, String carNum, String maintDate, int totalPrice, int status, String memo, List<MaintenanceDetailDTO> details) {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -455,13 +467,14 @@ public class MaintenanceDAO {
             pstmt.close();
 
             String updateSql = "UPDATE MAINT_REPORTS "
-                             + "SET MAINT_DATE = TO_DATE(?, 'YYYY-MM-DD'), TOTAL_PRICE = ?, STATUS = 1, MECHANIC_MEMO = ? "
+                             + "SET MAINT_DATE = TO_DATE(?, 'YYYY-MM-DD'), TOTAL_PRICE = ?, STATUS = ?, MECHANIC_MEMO = ? "
                              + "WHERE REPORT_NO = ?";
             pstmt = con.prepareStatement(updateSql);
             pstmt.setString(1, maintDate);
             pstmt.setInt(2, totalPrice);
-            pstmt.setString(3, memo);
-            pstmt.setInt(4, reportNo);
+            pstmt.setInt(3, status);
+            pstmt.setString(4, memo);
+            pstmt.setInt(5, reportNo);
             pstmt.executeUpdate();
             pstmt.close();
 
