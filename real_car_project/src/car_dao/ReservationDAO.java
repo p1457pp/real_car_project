@@ -286,7 +286,8 @@ public class ReservationDAO {
 			.append("  join USERS u on r.USER_ID=u.USER_ID  ")
 			.append("  join RESERV_STATE rs on r.RESERVATION_PERMISSION = rs.RESERV_CODE ")
 			.append("where u.USER_ID=?")
-			.append(" and r.is_deleted=1 ");
+			.append(" and r.is_deleted=1 ")
+			.append(" order by r.USER_RESERV_DATE desc, r.RESERVATION_CODE desc ");
 			pstmt = con.prepareStatement(selectedLine.toString());
 			pstmt.setString(1, userId);
 			
@@ -332,7 +333,8 @@ public class ReservationDAO {
 					.append(" join REPAIR_ITEM ri on rp.REPAIR_CODE=ri.REPAIR_CODE  ")
 					.append(" join USERS u on r.USER_ID=u.USER_ID  ")
 					.append(" where u.USER_ID=?  ")
-					.append(" and r.is_deleted=1  ");
+					.append(" and r.is_deleted=1  ")
+					.append(" order by r.USER_RESERV_DATE desc, r.RESERVATION_CODE desc ");
 
 			pstmt = con.prepareStatement(selectedLine.toString());
 

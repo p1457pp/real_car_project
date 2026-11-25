@@ -26,6 +26,7 @@ public class UserReservationListFormEvt extends MouseAdapter implements ActionLi
 	private JTabbedPane jtpUser;
 	private String userId;
 	private UserReservationService urs;
+	private int vehicleId;
 
 	public UserReservationListFormEvt(UserReservationListForm urlf, UserMainTab umt, JTabbedPane jtpUser,
 			String userId) {
@@ -33,6 +34,7 @@ public class UserReservationListFormEvt extends MouseAdapter implements ActionLi
 		this.umt = umt;
 		this.jtpUser = jtpUser;
 		this.userId = userId;
+		
 		this.urs = new UserReservationService();
 	}
 
