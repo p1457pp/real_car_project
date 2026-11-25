@@ -1,7 +1,5 @@
 package admin.car_service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import car_dao.MaintenanceDAO;
@@ -22,16 +20,17 @@ public class AdminMaintenanceService {
 		boolean flag;
 		if (mDTO.getReportNo() > 0) {
 			flag = mDAO.updateMaintenance(mDTO.getReportNo(), mDTO.getCarNum(), mDTO.getMaintDate(),
-					mDTO.getTotalPrice(), mDTO.getMechanicMemo(), mDTO.getMaintenanceInfo());
+					mDTO.getTotalPrice(), mDTO.getStatus(), mDTO.getMechanicMemo(), mDTO.getMaintenanceInfo());
 		} else {
 			flag = mDAO.insertMaintenance(mDTO.getCarNum(), mDTO.getMaintDate(), mDTO.getCenterName(),
-					mDTO.getTotalPrice(), mDTO.getMechanicMemo(), mDTO.getMaintenanceInfo());
+					mDTO.getTotalPrice(), mDTO.getStatus(), mDTO.getMechanicMemo(), mDTO.getMaintenanceInfo());
 		}
 		return flag ? 1 : 0;
 	}
 
 	/** 정비완료 처리 (DAO 에서 상태를 정비완료(1)로 저장) */
 	public int completeMaintenance(MaintenanceDTO mDTO) {
+		mDTO.setStatus(1);
 		return modifyMaintenance(mDTO);
 	}
 

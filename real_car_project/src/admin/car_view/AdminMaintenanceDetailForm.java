@@ -1,7 +1,5 @@
 package admin.car_view;
 
-import car_util.UiStyle;
-
 import java.awt.Font;
 import java.time.LocalDate;
 
@@ -20,13 +18,14 @@ import javax.swing.table.DefaultTableModel;
 
 import admin.AdminMainTab;
 import admin.car_evt.AdminMaintenanceDetailFormEvt;
+import car_util.UiStyle;
 
 public class AdminMaintenanceDetailForm extends JDialog {
 
 	private JTextField jtfCarNum, jtfMaintenanceDate;
 	private JButton jbtnSearch, jbtnAddItem, jbtnDeleteItem, jbtnComplete, jbtnCancel;
 	private JLabel jlblOwnerInfo, jlblTotal;
-	private JComboBox<String> jcbCenter, jcbRepairItem;
+	private JComboBox<String> jcbCenter, jcbRepairItem, jcbStatus;
 	private JSpinner jspQty;
 	private JTable jtItems;
 	private DefaultTableModel dtmItems;
@@ -56,16 +55,24 @@ public class AdminMaintenanceDetailForm extends JDialog {
 		jlblOwnerInfo.setBounds(335, 55, 340, 28);
 		add(jlblOwnerInfo);
 
-		// 정비일자 / 정비지점
-		add(createLabel("정비일자", 20, 95, 70));
+		// 정비일자 / 정비지점 / 진행상태
+		add(createLabel("정비일자", 20, 95, 65));
 		jtfMaintenanceDate = new JTextField(LocalDate.now().toString());
-		jtfMaintenanceDate.setBounds(95, 95, 130, 28);
+		jtfMaintenanceDate.setBounds(85, 95, 115, 28);
 		add(jtfMaintenanceDate);
 
-		add(createLabel("정비지점", 335, 95, 70));
+		add(createLabel("정비지점", 225, 95, 65));
 		jcbCenter = new JComboBox<String>(new String[] { "강남점", "마포점", "서초점", "송파점", "영등포점", "강서점", "용산점" });
-		jcbCenter.setBounds(410, 95, 130, 28);
+		jcbCenter.setBounds(290, 95, 115, 28);
 		add(jcbCenter);
+
+		add(createLabel("진행상태", 430, 95, 65));
+		jcbStatus = new JComboBox<String>(new String[] { "대기", "정비완료" });
+		jcbStatus.setBounds(495, 95, 115, 28);
+		if (reportNo == 0) {
+			jcbStatus.setSelectedItem("대기");
+		}
+		add(jcbStatus);
 
 		// 정비 항목 추가
 		add(createLabel("정비항목", 20, 140, 70));
@@ -119,7 +126,7 @@ public class AdminMaintenanceDetailForm extends JDialog {
 		jspMemo.setBounds(20, 418, 640, 100);
 		add(jspMemo);
 
-		jbtnComplete = new JButton("정비완료");
+		jbtnComplete = new JButton("저장");
 		jbtnComplete.setBounds(230, 540, 100, 30);
 		add(jbtnComplete);
 
@@ -198,6 +205,10 @@ public class AdminMaintenanceDetailForm extends JDialog {
 
 	public JComboBox<String> getJcbRepairItem() {
 		return jcbRepairItem;
+	}
+
+	public JComboBox<String> getJcbStatus() {
+		return jcbStatus;
 	}
 
 	public JSpinner getJspQty() {
