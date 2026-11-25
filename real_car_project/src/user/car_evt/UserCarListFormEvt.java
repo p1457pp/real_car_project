@@ -274,7 +274,6 @@ public class UserCarListFormEvt implements ActionListener {
 				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
 			return;
 		} // end if
-
 		
 		UserCarService ucs = new UserCarService(); // ucs 연결
 

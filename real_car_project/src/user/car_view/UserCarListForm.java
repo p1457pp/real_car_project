@@ -70,6 +70,7 @@ public class UserCarListForm extends JPanel {
 		jbtnCarDelete.setBounds(495, 545, 100, 30);
 		add(jbtnCarDelete);
 
+		
 		// 액션 이벤트 추가
 		UserCarListFormEvt evt = new UserCarListFormEvt(this, umt, jtpUser, userId);
 
