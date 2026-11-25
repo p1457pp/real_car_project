@@ -11,6 +11,7 @@ import admin.car_service.AdminCarService;
 import admin.car_view.AdminCarEditForm;
 import car_dto.CarDTO;
 import car_dto.ManufacturerDTO;
+import car_util.ImageResizer;
 import user.car_service.UserCarService;
 
 
@@ -76,7 +77,7 @@ public class AdminCarEditFormEvt implements ActionListener {
 		photo = cDTO.getCarPhoto(); // vehicleId의 기존 사진 정보 가져오기
 		if (photo != null) { // 사진이 등록 되어있을 경우
 			acef.getJlblPhoto().setText(""); // 사진에 있는 이미지 없음을 ""공백으로 전환
-			acef.getJlblPhoto().setIcon(new ImageIcon(photo)); // 안쪽 사진을 기존 사진으로 채운다
+			acef.getJlblPhoto().setIcon(ImageResizer.fit(photo, acef.getJlblPhoto())); // 안쪽 사진을 기존 사진으로 채운다
 		} // end if
 
 		// 선택된 라디오버튼 정보 가져오기

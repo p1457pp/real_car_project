@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import car_dto.CarDTO;
 import car_dto.ManufacturerDTO;
+import car_util.ImageResizer;
 import user.car_service.UserCarService;
 import user.car_view.UserCarRegisterForm;
 
@@ -76,7 +77,7 @@ public class UserCarRegisterFormEvt implements ActionListener {
 				// 파일의 모든 바이트를 photo 바이트 배열에 저장
 				selectedPhoto = Files.readAllBytes(file.toPath());
 				ucrf.getJlblPhoto().setText(""); // 이미지없음을 없애고
-				ucrf.getJlblPhoto().setIcon(new ImageIcon(selectedPhoto)); // 현재 사진정보로 수정
+				ucrf.getJlblPhoto().setIcon(ImageResizer.fit(selectedPhoto, ucrf.getJlblPhoto())); // 현재 사진정보로 수정
 			} catch (IOException ioe) {
 				// 예외가떨어지면 에러메세지 출력
 				JOptionPane.showMessageDialog(ucrf, "사진을 읽을 수 없습니다.");

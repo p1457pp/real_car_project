@@ -19,7 +19,7 @@ import user.car_evt.UserCarListFormEvt;
 public class UserCarListForm extends JPanel {
 
 	private JLabel jlblTitle;
-	private JButton jbtnAddCar, jbtnCarInfoEdit, jbtShowCarMaintenance, jbtnCarDelete;
+	private JButton jbtnAddCar, jbtnCarInfoEdit, jbtShowCarMaintenance, jbtnCarDelete, jbtnReservation;
 
 	private JTable jtUserCarList;
 	private DefaultTableModel dtmCarList;
@@ -54,18 +54,23 @@ public class UserCarListForm extends JPanel {
 		add(jsp);
 
 		// 하단 버튼
-		jbtnCarInfoEdit = new JButton("수정");
-		jbtnCarInfoEdit.setBounds(230, 545, 100, 30);
-		add(jbtnCarInfoEdit);
+		jbtnReservation = new JButton("예약하기");
+		jbtnReservation.setBounds(165, 545, 100, 30);
+		add(jbtnReservation);
 
 		jbtShowCarMaintenance = new JButton("정비이력");
-		jbtShowCarMaintenance.setBounds(340, 545, 100, 30);
+		jbtShowCarMaintenance.setBounds(275, 545, 100, 30);
 		add(jbtShowCarMaintenance);
 
+		jbtnCarInfoEdit = new JButton("수정");
+		jbtnCarInfoEdit.setBounds(385, 545, 100, 30);
+		add(jbtnCarInfoEdit);
+
 		jbtnCarDelete = new JButton("삭제");
-		jbtnCarDelete.setBounds(450, 545, 100, 30);
+		jbtnCarDelete.setBounds(495, 545, 100, 30);
 		add(jbtnCarDelete);
 
+		
 		// 액션 이벤트 추가
 		UserCarListFormEvt evt = new UserCarListFormEvt(this, umt, jtpUser, userId);
 
@@ -73,9 +78,10 @@ public class UserCarListForm extends JPanel {
 		jbtnCarInfoEdit.addActionListener(evt);
 		jbtShowCarMaintenance.addActionListener(evt);
 		jbtnCarDelete.addActionListener(evt);
+		jbtnReservation.addActionListener(evt); // 예약하기 이벤트 연결
 
 		UiStyle.apply(this);
-
+	
 	}
 
 	public JButton getJbtnAddCar() {
@@ -100,6 +106,10 @@ public class UserCarListForm extends JPanel {
 
 	public DefaultTableModel getDtmCarList() {
 		return dtmCarList;
+	}
+
+	public JButton getJbtnReservation() {
+		return jbtnReservation;
 	}
 
 }
