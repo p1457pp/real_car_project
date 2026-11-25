@@ -19,6 +19,7 @@ import user.car_view.UserCarEditForm;
 import user.car_view.UserCarListForm;
 import user.car_view.UserCarRegisterForm;
 import user.car_view.UserMaintenanceForm;
+import user.car_view.UserReservationForm;
 
 
 
@@ -55,18 +56,55 @@ public class UserCarListFormEvt implements ActionListener {
 			removeCar();
 		} // end if
 
+		if (ae.getSource() == uclf.getJbtnReservation()) {
+			moveToReservation();
+		} // end if
+
 		if (ae.getSource() == uclf.getJbtShowCarMaintenance()) {
 			int row = uclf.getJtUserCarList().getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(uclf, "정비이력을 볼 차량을 선택해주세요.");
 				return;
+			} // end if
+			moveMaintenance(Integer.parseInt(uclf.getDtmCarList().getValueAt(row, VEHICLE_ID).toString()));
+		} // end if
 	}// actionPerformed
+
+	/**
+	 * 선택한 차량의 차량번호, 차종을 채운 예약 신청 화면으로 이동하는 일
+	 */
+	public void moveToReservation() {
+		// 1. 선택한 행 가져오기
+		int row = uclf.getJtUserCarList().getSelectedRow();
+
+		// 2. 차량 선택 여부 확인
+		if (row == -1) {
+			JOptionPane.showMessageDialog(uclf, "차량을 선택해주세요.");
+			return;
+		} // end if
+
+		// 3. 원본 모델의 행 번호 가져오기
+		int modelRow = uclf.getJtUserCarList().convertRowIndexToModel(row);
+
+		// 4. 차량번호(2), 차종(3) 가져오기
+		String vehicleNum = uclf.getDtmCarList().getValueAt(modelRow, 2).toString();
+		String vehicleModel = uclf.getDtmCarList().getValueAt(modelRow, 3).toString();
+
+		// 5. 예약 신청 화면 생성 후 차량번호, 차종 채우기
+		UserReservationForm urf = new UserReservationForm(umt, jtpUser, userId);
+		urf.getJtfCarNum().setText(vehicleNum);
+		urf.getJtfCarModel().setText(vehicleModel);
+
+		// 6. 예약관리 탭(2번)의 패널 교체 후 이동
+		jtpUser.setComponentAt(2, urf);
+		jtpUser.setSelectedIndex(2);
+		jtpUser.revalidate(); // 바뀐 레이아웃 다시계산
+		jtpUser.repaint(); // 계산된 레이아웃으로 다시 화면 설정
+	}// moveToReservation
+
 	/**
 	 * 내 차량을 조회하여 JTable에 설정하는 일 (삭제된 차량은 조회되지 않는다)
 	 */
-			moveMaintenance(Integer.parseInt(uclf.getDtmCarList().getValueAt(row, VEHICLE_ID).toString()));
-		}
-	}
 
 	public void searchCarByUserId(String userId) {
 		UserCarService ucs = new UserCarService(); // ucs 연결
