@@ -36,7 +36,7 @@ public class UserCarListForm extends JPanel {
 		jbtnAddCar.setBounds(660, 10, 90, 25);
 		add(jbtnAddCar);
 
-		String[] columns = { "차량ID", "사진", "차량번호", "차종", "연식", "폐차" };
+		String[] columns = { "차량ID", "사진", "차량번호", "차종", "제조사", "연식" };
 		dtmCarList = new DefaultTableModel(columns, 0);
 
 		jtUserCarList = new JTable(dtmCarList);

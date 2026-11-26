@@ -121,8 +121,8 @@ public class UserCarListFormEvt implements ActionListener {
 					changeImage(cDTO.getCarPhoto()), // 사진
 					cDTO.getCarNum(), // 차량번호
 					cDTO.getCarModel(), // 차종
-					cDTO.getCarYear(), // 연식
-					cDTO.getCarScrapped() // 폐차
+					cDTO.getManufacturerName(), // 제조사
+					cDTO.getCarYear() // 연식
 			});
 		} // end for
 	}// searchCar
