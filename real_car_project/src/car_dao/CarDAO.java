@@ -236,12 +236,14 @@ public class CarDAO {
 			//3.쿼리문 생성객체 얻기
 			StringBuilder selectCar = new StringBuilder();
 			selectCar
-			.append("	select	vehicle_id, car_num, car_model, car_year, fuel_type,	")
-			.append("			mileage, car_scrapped, car_photo, add_date, manufacturer_id, user_id, is_deleted	")
-			.append("	from	car_info		")
-			.append("	where	user_id = ?		")
-			.append("	and		is_deleted = 1	")
-			.append("	order by vehicle_id		");
+			.append("	select	c.vehicle_id, c.car_num, c.car_model, c.car_year, c.fuel_type,	")
+			.append("			c.mileage, c.car_scrapped, c.car_photo, c.add_date, c.manufacturer_id,	")
+			.append("			c.user_id, c.is_deleted, m.manufacturer	")
+			.append("	from	car_info c	")
+			.append("	left join car_manufacturer m on c.manufacturer_id = m.manufacturer_id	")
+			.append("	where	c.user_id = ?		")
+			.append("	and		c.is_deleted = 1	")
+			.append("	order by c.vehicle_id		");
 
 			pstmt = con.prepareStatement(selectCar.toString());
 			//4.바인드 변수 설정
@@ -262,6 +264,7 @@ public class CarDAO {
 				cDTO.setCarScrapped(rs.getString("car_scrapped"));
 				cDTO.setAddDate(rs.getDate("add_date"));
 				cDTO.setManufacturerId(rs.getInt("manufacturer_id"));
+				cDTO.setManufacturerName(rs.getString("manufacturer")); // 제조사 이름
 				cDTO.setUserId(rs.getString("user_id"));
 				cDTO.setIsDeleted(rs.getInt("is_deleted"));
 

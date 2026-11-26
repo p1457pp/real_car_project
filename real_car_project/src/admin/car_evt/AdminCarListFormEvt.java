@@ -59,7 +59,7 @@ public class AdminCarListFormEvt implements ActionListener {
 		} // end for
 	}// searchAllCar
 	/**
-	 * 선택한 차량을 삭제(delete_state = 'Y')하고 JTable을 갱신하는 일
+	 * 선택한 차량을 삭제(is_deleted = 'Y')하고 JTable을 갱신하는 일
 	 */
 	public void updateDeleteState() {
 		int row = aclf.getJtCar().getSelectedRow(); // 선택한 행이 몇번째행인지 알기위해 변수로 담는다

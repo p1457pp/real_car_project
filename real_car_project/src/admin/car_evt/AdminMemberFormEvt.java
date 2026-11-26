@@ -51,7 +51,7 @@ public class AdminMemberFormEvt implements ActionListener {
 
 		String userId = (String) amf.getDtm().getValueAt(row, 0);
 
-		int choice = JOptionPane.showConfirmDialog(amf, userId + " 회원을 삭제하시겠습니까?\n(회원 정보와 차량은 삭제 처리만 되고, 예약/정비 기록은 DB에 보존됩니다.)", "삭제 확인",
+		int choice = JOptionPane.showConfirmDialog(amf, userId + " 회원을 삭제하시겠습니까?", "삭제 확인",
 				JOptionPane.YES_NO_OPTION);
 		if (choice != JOptionPane.YES_OPTION) {
 			return;
@@ -85,7 +85,7 @@ public class AdminMemberFormEvt implements ActionListener {
 		amf.setEditMode(true);
 		amf.getJbtnChange().setText("수정완료");
 		amf.getJbtnDelete().setEnabled(false);
-		JOptionPane.showMessageDialog(amf, "수정할 셀을 더블클릭해서 입력한 뒤 Enter를 누르고,\n끝나면 [수정완료] 버튼을 눌러주세요.");
+		JOptionPane.showMessageDialog(amf, "수정할 회원을 더블클릭해서 입력한 뒤 Enter를 누르고,\n끝나면 수정완료 버튼을 눌러주세요.");
 	}
 
 	public void finishEdit() {
