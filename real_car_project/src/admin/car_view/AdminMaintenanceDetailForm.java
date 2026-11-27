@@ -62,7 +62,7 @@ public class AdminMaintenanceDetailForm extends JDialog {
 		add(jtfMaintenanceDate);
 
 		add(createLabel("정비지점", 225, 95, 65));
-		jcbCenter = new JComboBox<String>(new String[] { "강남점", "마포점", "서초점", "송파점", "영등포점", "강서점", "용산점" });
+		jcbCenter = new JComboBox<String>(new String[] { "강남점" });
 		jcbCenter.setBounds(290, 95, 115, 28);
 		add(jcbCenter);
 
